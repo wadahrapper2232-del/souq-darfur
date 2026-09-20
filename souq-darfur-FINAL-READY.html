@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1,user-scalable=no">
+<title>سوق دارفور - ULTRA PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+--green-900:#061E16;--green-800:#0A2E22;--green-700:#0F3D2E;--green-600:#164E3B;--gold-300:#F5E6D3;--gold-400:#D4A87A;--gold-500:#A67C52;
+--paper:#FFFDFA;--paper-2:#F8F3EB;--line:#F0EBE3;--ink:#0F2E22;--muted:#8A847C;
+--orange:#FF6B35;--red:#DC2626;--whats:#25D366;
+--shadow-lg:0 20px 50px rgba(6,30,22,.18),0 0 0 1px rgba(240,235,227,.9);
+--shadow-md:0 12px 28px rgba(6,30,22,.10),0 0 0 1px rgba(240,235,227,.9);
+--shadow-sm:0 6px 16px rgba(6,30,22,.06),0 0 0 1px rgba(240,235,227,.8);
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Tajawal',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(120% 120% at 50% -20%,#FDF6E8 0%,#F5F1EB 35%,#EDE6D6 100%);display:flex;justify-content:center;min-height:100vh}
+#app{width:100%;max-width:430px;background:linear-gradient(180deg,var(--paper) 0%,#FEFEFE 100%);min-height:100vh;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+.hidden{display:none!important}
+.screen{min-height:100vh;background:linear-gradient(180deg,var(--paper) 0%,var(--paper-2) 100%);overflow-y:auto;animation:fadeIn .45s cubic-bezier(.22,1,.36,1)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* SPLASH ULTRA PRO */
+#splash{background:
+radial-gradient(90% 70% at 50% 0%,rgba(212,168,122,.18) 0%,transparent 60%),
+radial-gradient(80% 80% at 80% 20%,rgba(255,107,53,.12) 0%,transparent 50%),
+linear-gradient(180deg,#0A2E22 0%,#061E16 100%);
+display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;position:relative;overflow:hidden}
+#splash::after{content:'';position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent 0deg,rgba(212,168,122,.06) 60deg,transparent 120deg,rgba(255,255,255,.04) 200deg,transparent 300deg);animation:spin 18s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.logo{width:118px;height:118px;border-radius:30px;background:linear-gradient(135deg,#F5E6D3 0%,#D4A87A 45%,#A67C52 100%);display:flex;align-items:center;justify-content:center;font-size:52px;box-shadow:0 24px 50px rgba(0,0,0,.35),0 0 0 1px rgba(245,230,211,.5),inset 0 1px 0 rgba(255,255,255,.7),inset 0 -8px 20px rgba(166,124,82,.25);position:relative;z-index:1;animation:float 3.2s ease-in-out infinite}
+.logo::before{content:'';position:absolute;inset:10px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.35),transparent);pointer-events:none}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-8px) rotate(1deg)}}
+.title{color:#F5E6D3;font-size:42px;font-weight:900;margin-top:24px;letter-spacing:-1.2px;position:relative;z-index:1;text-shadow:0 4px 20px rgba(0,0,0,.4),0 1px 0 rgba(255,255,255,.1);font-family:'Amiri',serif}
+.subtitle{color:#D4A87A;font-size:13px;margin-top:8px;letter-spacing:3px;font-weight:800;position:relative;z-index:1;text-transform:uppercase;background:linear-gradient(90deg,#D4A87A,#F5E6D3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.dots{display:flex;gap:12px;margin-top:40px;position:relative;z-index:1}
+.dot{width:12px;height:12px;background:linear-gradient(135deg,#FFB88A,#FF6B35);border-radius:50%;box-shadow:0 0 0 4px rgba(255,107,53,.15),0 4px 12px rgba(255,107,53,.4);animation:bounce 1.1s cubic-bezier(.68,-.55,.265,1.55) infinite}
+.dot:nth-child(2){animation-delay:.18s;background:linear-gradient(135deg,#F5E6D3,#D4A87A)}.dot:nth-child(3){animation-delay:.36s}
+@keyframes bounce{0%,100%{transform:translateY(0) scale(1)}40%{transform:translateY(-14px) scale(1.15)}60%{transform:translateY(-7px) scale(1.05)}}
+
+/* INPUT ULTRA */
+.i{width:100%;border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;font-size:13.5px;margin:8px 0;outline:none;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);transition:all .28s cubic-bezier(.22,1,.36,1);font-weight:600;box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 2px 8px rgba(6,30,22,.03)}
+.i:focus{border-color:var(--green-700);background:#fff;box-shadow:0 0 0 5px rgba(15,61,46,.08),0 12px 24px rgba(15,61,46,.08),inset 0 1px 0 #fff;transform:translateY(-1px)}
+
+/* BUTTON ULTRA - shimmer */
+.b{width:100%;background:linear-gradient(135deg,var(--green-700) 0%,var(--green-800) 100%);color:#fff;border:none;padding:15px;border-radius:16px;font-weight:900;font-size:14.5px;margin-top:12px;cursor:pointer;box-shadow:0 12px 28px rgba(15,61,46,.28),0 0 0 1px rgba(15,61,46,.15),inset 0 1px 0 rgba(255,255,255,.15);transition:all .22s;position:relative;overflow:hidden;letter-spacing:.2px}
+.b::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transition:left .6s}
+.b:hover::after{left:100%}
+.b:active{transform:scale(.985) translateY(1px);box-shadow:0 6px 16px rgba(15,61,46,.22)}
+.b-green{background:linear-gradient(135deg,#1E6B3A,#2D7A32);box-shadow:0 12px 28px rgba(30,107,58,.28)}
+.b-orange{background:linear-gradient(135deg,#FF8A4A,#FF6B35);box-shadow:0 12px 28px rgba(255,107,53,.32)}
+.b-whats{background:linear-gradient(135deg,#2FE47A,#25D366);color:#061E16;box-shadow:0 12px 28px rgba(37,211,102,.3)}
+
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#061E16,#0A2E22);color:#F5E6D3;padding:11px 20px;border-radius:28px;font-size:11.5px;font-weight:800;z-index:9999;box-shadow:0 16px 40px rgba(0,0,0,.35),0 0 0 1px rgba(212,168,122,.25),inset 0 1px 0 rgba(255,255,255,.08);animation:up .42s cubic-bezier(.34,1.56,.64,1);border:1px solid rgba(212,168,122,.12)}
+@keyframes up{from{transform:translate(-50%,40px) scale(.85);opacity:0}to{transform:translate(-50%,0) scale(1);opacity:1}}
+
+.card{background:linear-gradient(180deg,#FFFFFF 0%,#FFFDFA 100%);border:1px solid rgba(240,235,227,.95);border-radius:20px;padding:10px;box-shadow:var(--shadow-sm);transition:all .32s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,168,122,.35),transparent);opacity:0;transition:.3s}
+.card:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 18px 36px rgba(6,30,22,.10),0 0 0 1px rgba(212,168,122,.2)}
+.card:hover::before{opacity:1}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+
+.top{height:60px;background:rgba(255,253,250,.88);backdrop-filter:blur(22px) saturate(1.2);border-bottom:1px solid rgba(240,235,227,.9);display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:20;box-shadow:0 1px 0 rgba(255,255,255,.8),0 10px 30px rgba(6,30,22,.05)}
+.bottom{position:fixed;bottom:0;left:0;right:0;max-width:430px;margin:0 auto;background:rgba(255,253,250,.92);backdrop-filter:blur(24px) saturate(1.2);border-top:1px solid rgba(240,235,227,.9);display:flex;justify-content:space-around;padding:10px 0 8px;z-index:20;box-shadow:0 -12px 40px rgba(6,30,22,.07)}
+.bottom button{border:none;background:none;font-size:10px;line-height:13px;color:#9A958C;font-weight:700;transition:all .24s;padding:6px 10px;border-radius:12px;position:relative}
+.bottom button:hover{background:rgba(240,235,227,.6);color:var(--green-700);transform:translateY(-1px)}
+
+.label-pro{font-size:10.5px;font-weight:900;color:var(--green-700);letter-spacing:.4px;display:flex;align-items:center;gap:6px;margin:10px 0 4px 2px;text-transform:uppercase}
+.label-pro::before{content:'';width:4px;height:14px;background:linear-gradient(180deg,#FF6B35 0%,#D4A87A 100%);border-radius:3px;display:inline-block;box-shadow:0 2px 6px rgba(255,107,53,.25)}
+
+.avatar-ring{position:relative;display:inline-flex;padding:3px;background:linear-gradient(135deg,#F5E6D3 0%,#D4A87A 50%,#A67C52 100%);border-radius:50%;box-shadow:0 8px 20px rgba(166,124,82,.25),0 0 0 4px rgba(245,230,211,.6)}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Supabase Config - مربوط بمشروعك
+const SUPABASE_URL = "https://qmzkdvphrcuwneboyeda.supabase.co";
+const SUPABASE_KEY = "sb_publishable_rHycFHkRNiR9V5vTghpguA_e__nfOgb";
+let supabaseClient = null;
+try{
+  if(window.supabase) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}catch(e){ console.log("Supabase init failed, will use local only", e); }
+
+async function syncFromSupabase(){
+  if(!supabaseClient) return;
+  try{
+    const {data:prods} = await supabaseClient.from('products').select('*').order('created_at',{ascending:false}).limit(100);
+    if(prods && prods.length){
+      const converted = prods.map(r=>({
+        id: r.id,
+        name: r.product_name || r.name || 'منتج',
+        price: r.price,
+        type: r.product_type || r.type || '📦 أخرى',
+        whatsapp: r.whatsapp,
+        loc: r.location || r.loc || 'عديلة',
+        state: r.state || 'شرق دارفور',
+        img: r.image_emoji || '📦',
+        imgBase64: r.image_base64 || '',
+        commission: Math.round((parseFloat(r.price)||0)*0.1),
+        orders: r.orders||0
+      }));
+      // دمج مع المحلي بدون تكرار
+      localStorage.setItem('dm_products', JSON.stringify(converted));
+    }
+    const {data:em} = await supabaseClient.from('emergency_alerts').select('*').order('created_at',{ascending:false}).limit(50);
+    if(em && em.length){
+      const convertedEm = em.map(r=>({id:r.id, type:r.title||r.type||'🚨 تنبيه', text:r.description||r.text||'', time:'الآن'}));
+      localStorage.setItem('dm_emer', JSON.stringify(convertedEm));
+    }
+  }catch(err){ console.log('sync error', err); }
+}
+</script>
+
+</head>
+<body>
+<div id="app">
+<div id="app">
+
+<div id="splash" class="screen"><div class="logo">🛒</div><div class="title">سوق دارفور</div><div class="subtitle">دارفور بلدنا ❤️</div><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+
+<div id="screen-login" class="screen hidden" style="padding:22px;background:linear-gradient(180deg,#FFFDFA 0%,#F5F1EB 100%)">
+<div style="margin-top:20px"><h2 style="font-size:24px;font-weight:900;color:#0F2E22;letter-spacing:-.5px">مرحباً بعودتك 👋</h2><p style="color:#8A847C;font-size:11px;margin-top:6px;font-weight:500">سوق دارفور الأصيل • دخول آمن وسريع</p></div>
+<div style="margin-top:28px;background:#fff;border-radius:20px;padding:18px;box-shadow:0 12px 32px rgba(15,61,46,.06),0 0 0 1px #F0EBE3">
+<input id="loginEmail" class="i" placeholder="البريد الإلكتروني" style="margin-top:2px">
+<input id="loginPass" type="password" class="i" placeholder="كلمة السر">
+<button onclick="doLogin()" class="b" style="margin-top:14px">دخول آمن 🔐</button>
+</div>
+<div style="display:flex;justify-content:space-between;margin-top:16px;font-size:11px;padding:0 4px">
+<button onclick="showScreen('forgot')" style="border:none;background:none;color:#8A847C;font-weight:600">نسيت كلمة السر؟</button>
+<button onclick="showScreen('register')" style="border:none;background:none;color:#0F3D2E;font-weight:800;background:#F0EBE3;padding:6px 12px;border-radius:20px">إنشاء حساب جديد ✨</button>
+</div>
+</div>
+
+<div id="screen-register" class="screen hidden" style="padding:18px;background:#FFFDFA">
+<button onclick="goBack()" style="width:36px;height:36px;border-radius:12px;border:1px solid #F0EBE3;background:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.04)">←</button>
+<h2 style="font-weight:900;margin:14px 0 4px;font-size:18px;color:#0F2E22">إنشاء حساب جديد ✨</h2>
+<p style="font-size:11px;color:#8A847C;margin-bottom:14px">انضم لسوق دارفور الأصيل</p>
+<div style="background:#fff;border-radius:16px;padding:14px;box-shadow:0 8px 24px rgba(15,61,46,.04),0 0 0 1px #F0EBE3;margin-bottom:14px">
+<div style="display:flex;gap:8px;margin-bottom:10px"><div onclick="setGender('ذكر');pickAvatar('🧑🏿‍🌾')" id="gMale" style="flex:1;padding:10px;border-radius:12px;border:2px solid #0F3D2E;background:#F0F5F2;font-size:11px;font-weight:800;text-align:center;cursor:pointer;transition:.2s">🧑🏿‍🌾 ذكر</div><div onclick="setGender('أنثى');pickAvatar('👩🏿‍🌾')" id="gFemale" style="flex:1;padding:10px;border-radius:12px;border:1px solid #F0EBE3;background:#fff;font-size:11px;font-weight:600;text-align:center;cursor:pointer;transition:.2s">👩🏿‍🌾 أنثى</div></div>
+<div id="profileAvatar" style="text-align:center;font-size:42px;margin:8px 0">🧑🏿‍🌾</div>
+</div>
+<div class="label-pro">الاسم بالكامل *</div><input id="regName" class="i" placeholder="مثال: وضح عبد الرحمن">
+<div class="label-pro">بريد الكتروني *</div><input id="regEmail" class="i" placeholder="example@gmail.com" style="direction:ltr;text-align:right">
+<div class="label-pro">كلمه السر *</div><input id="regPass" type="password" class="i" placeholder="••••••••">
+<div class="label-pro">تاكيد كلمه السر *</div><input id="regPass2" type="password" class="i" placeholder="••••••••">
+<label style="font-size:10px;display:flex;gap:6px;margin:12px 0;color:#5A554F;font-weight:600"><input type="checkbox" id="terms" style="accent-color:#0F3D2E"> أوافق على شروط سوق دارفور الأصيل</label>
+<button onclick="doRegister()" class="b b-green">يلا راح سجل معانا يازول</button>
+</div>
+
+<div id="screen-forgot" class="screen hidden" style="padding:18px;background:#FFFDFA">
+<button onclick="goBack()" style="width:36px;height:36px;border-radius:12px;border:1px solid #F0EBE3;background:#fff;display:flex;align-items:center;justify-content:center">←</button>
+<h2 style="font-weight:900;margin-top:14px;font-size:16px;color:#0F2E22">نسيت كلمة السر؟ 🔑</h2>
+<p style="font-size:11px;color:#8A847C;margin-top:4px">نرجعك لحسابك في ثواني</p>
+<div id="forgotStep1" style="margin-top:18px;background:#fff;border-radius:16px;padding:14px;box-shadow:0 8px 24px rgba(15,61,46,.04),0 0 0 1px #F0EBE3"><div class="label-pro">بريد الكتروني *</div><input id="forgotEmail" class="i" placeholder="بريدك المسجل"><button onclick="doForgot()" class="b b-orange" style="margin-top:12px">التحقق وإرسال الكود 📧</button></div>
+<div id="forgotStep2" class="hidden" style="margin-top:14px"><div style="background:#fff;border-radius:16px;padding:14px;box-shadow:0 8px 24px rgba(15,61,46,.04),0 0 0 1px #F0EBE3"><p id="forgotUserInfo" style="font-size:11px;background:linear-gradient(135deg,#F0FDF4,#DCFCE7);padding:10px;border-radius:12px;border:1px solid #BBF7D0;margin-bottom:10px;font-weight:600"></p><div class="label-pro">كلمه السر الجديدة *</div><input id="newPass" type="password" class="i" placeholder="كلمه السر الجديدة"><div class="label-pro">تاكيد كلمه السر *</div><input id="newPass2" type="password" class="i" placeholder="تاكيد كلمه السر"><button onclick="doResetPassword()" class="b b-green">تغيير كلمة السر 🔐</button></div></div>
+</div>
+
+<div id="topbar" class="top hidden"><div style="display:flex;align-items:center;gap:8px"><button onclick="goBack()" style="width:32px;height:32px;border-radius:10px;border:1px solid #F0EBE3;background:#fff;display:flex;align-items:center;justify-content:center">←</button><div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#0F3D2E,#1A4D3A);display:flex;align-items:center;justify-content:center;color:#D4A87A;font-size:12px;font-weight:900">د</div><div><b style="color:#0F2E22;font-size:12px;font-weight:800;display:block;line-height:12px">دارفور ماركت</b><span style="font-size:7px;color:#8A847C;letter-spacing:1px">DARFUR MARKET</span></div><span style="font-size:7px;background:linear-gradient(135deg,#DCFCE7,#BBF7D0);color:#166534;padding:3px 7px;border-radius:20px;font-weight:800;border:1px solid #BBF7D0">متصل ●</span></div><div style="display:flex;gap:6px"><div style="font-size:9px;background:#FFFDFA;border:1px solid #F0EBE3;padding:5px 9px;border-radius:20px;display:flex;align-items:center;gap:4px;font-weight:600">📍 <span id="locText">دارفور</span></div></div></div>
+
+<div id="screen-home" class="screen hidden" style="padding:12px;padding-bottom:76px;background:linear-gradient(180deg,#FFFDFA 0%,#F5F1EB 100%)">
+<div style="display:flex;gap:8px;margin-bottom:12px"><select id="stateSel" onchange="updateLocalities()" style="flex:1;padding:10px 12px;border-radius:12px;border:1.5px solid #0F3D2E;background:#fff;font-size:11px;font-weight:700;box-shadow:0 4px 12px rgba(15,61,46,.06)"><option value="كل دارفور">🌍 كل دارفور</option><option value="شرق دارفور" selected>شرق دارفور</option><option value="جنوب دارفور">جنوب دارفور</option><option value="شمال دارفور">شمال دارفور</option><option value="غرب دارفور">غرب دارفور</option><option value="وسط دارفور">وسط دارفور</option></select><select id="locSel" onchange="filterProducts()" style="flex:1;padding:10px 12px;border-radius:12px;border:1px solid #E8E2D9;background:#fff;font-size:10px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.03)"></select></div>
+<div id="productGrid" class="grid2"></div>
+</div>
+
+<div id="bottomNav" class="bottom hidden"><button onclick="showScreen('home')" style="display:flex;flex-direction:column;align-items:center;gap:2px"><span style="font-size:16px">🏠</span>الرئيسية</button><button onclick="showScreen('add')" style="display:flex;flex-direction:column;align-items:center;gap:2px"><span style="width:28px;height:28px;background:linear-gradient(135deg,#0F3D2E,#1A4D3A);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">+</span>بيع</button><button onclick="showScreen('emergency')" style="display:flex;flex-direction:column;align-items:center;gap:2px"><span style="font-size:16px">🚨</span>طوارئ</button><button onclick="showScreen('reports')" style="display:flex;flex-direction:column;align-items:center;gap:2px"><span style="font-size:16px">⚠️</span>بلاغات</button><button onclick="showScreen('profile')" style="display:flex;flex-direction:column;align-items:center;gap:2px"><span style="font-size:16px">👤</span>حسابي</button></div>
+
+<div id="screen-add" class="screen hidden" style="padding:14px;padding-bottom:76px;background:#FFFDFA">
+<button onclick="goBack()" style="width:36px;height:36px;border-radius:12px;border:1px solid #F0EBE3;background:#fff;display:flex;align-items:center;justify-content:center">←</button>
+<h2 style="font-weight:900;margin:12px 0 4px;font-size:16px;color:#0F2E22">إضافة منتج احترافي 🛍️</h2><p style="font-size:10px;color:#8A847C;margin-bottom:12px">بيعك يصل كل دارفور - عمولة 10% ليك</p>
+<div style="border:1.5px dashed #D4A87A;border-radius:16px;padding:14px;text-align:center;background:linear-gradient(135deg,#FFFDFA,#FFF7ED);margin-bottom:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)"><img id="prodPreview" style="width:100%;height:130px;object-fit:cover;border-radius:12px;display:none;margin-bottom:8px;box-shadow:0 8px 20px rgba(0,0,0,.1)"><input type="file" id="prodImage" accept="image/*" style="display:none" onchange="previewFile(this,'prodPreview')"><button onclick="document.getElementById('prodImage').click()" style="background:linear-gradient(135deg,#FF6B35,#E86A2C);color:#fff;border:none;padding:10px 18px;border-radius:24px;font-size:11px;font-weight:800;box-shadow:0 6px 16px rgba(255,107,53,.3)">📸 صورة المنتج الاحترافية</button><p id="prodImageStatus" style="font-size:9px;color:#16A34A;display:none;margin-top:6px;font-weight:700">✓ تم اختيار الصورة</p></div>
+<div class="label-pro">اسم المنتج *</div><input id="pName" class="i" placeholder="مثال: فول سوداني درجة أولى">
+<div style="display:flex;gap:8px"><div style="flex:1"><div class="label-pro">السعر *</div><input id="pPrice" type="number" class="i" placeholder="15000"></div><div style="flex:1"><div class="label-pro">نوع المنتج *</div><select id="pType" class="i" style="padding:11px"><option>🌾 محاصيل</option><option>🐑 مواشي</option><option>🍯 عسل</option><option>🧶 حرف يدوية</option><option>🧂 بهارات</option><option>🥛 ألبان</option><option>👕 ملابس</option><option>📱 إلكترونيات</option><option>📦 أخرى</option></select></div></div>
+<div class="label-pro">رقم الواتساب للتواصل *</div><input id="pWhatsapp" class="i" placeholder="2499xxxxxxx" style="direction:ltr;text-align:right;border-color:#25D36630"><div style="font-size:8px;color:#25D366;margin-top:-4px;margin-bottom:8px;font-weight:600">💬 سيتواصل المشتري معك عبر واتساب مباشرة</div>
+<div class="label-pro">المكان *</div><div style="display:flex;gap:8px;margin-bottom:4px"><select id="pState" class="i" style="flex:1"><option selected>شرق دارفور</option><option>جنوب دارفور</option><option>شمال دارفور</option><option>غرب دارفور</option><option>وسط دارفور</option></select><input id="pLoc" class="i" placeholder="عديلة" value="عديلة" style="flex:1"></div>
+<button onclick="addProduct()" class="b b-green" style="margin-top:12px">نشر المنتج الاحترافي - تربح عمولة 10% 💰🚀</button>
+</div>
+
+<div id="screen-emergency" class="screen hidden" style="padding:14px;padding-bottom:76px;background:#FFFDFA">
+<button onclick="goBack()" style="width:36px;height:36px;border-radius:12px;border:1px solid #F0EBE3;background:#fff">←</button>
+<h2 style="font-weight:900;margin:10px 0;color:#DC2626;font-size:15px;display:flex;align-items:center;gap:6px">🚨 طوارئ دارفور <span style="font-size:9px;background:#FEE2E2;color:#DC2626;padding:3px 8px;border-radius:20px;border:1px solid #FECACA">يراه كل دارفور</span></h2>
+<div id="emergencyList" style="margin-top:12px"></div>
+<div id="emergencyAdmin" class="hidden" style="margin-top:16px;background:#fff;border-radius:16px;padding:12px;box-shadow:0 8px 24px rgba(220,38,38,.08),0 0 0 1px #FEE2E2"><p style="font-size:11px;font-weight:800;color:#DC2626;display:flex;align-items:center;gap:4px">🔐 أدمن: إضافة تنبيه طوارئ</p><select id="eType" class="i" style="margin-top:8px"><option>🔥 حريق</option><option>🍞 اغاثة</option><option>🌪️ عاصفة</option><option>🌧️ مطر غزير</option><option>🌊 سيول</option><option>🌫️ عاصفة ترابية</option><option>⚠️ نزاع</option><option>🏥 مرض</option></select><input id="eText" class="i" placeholder="تفاصيل التنبيه - يصل كل الأعضاء"><button onclick="addEmergency()" class="b" style="background:linear-gradient(135deg,#DC2626,#B91C1C);margin-top:8px">نشر تنبيه طوارئ لكل دارفور 📢</button></div>
+</div>
+
+<div id="screen-reports" class="screen hidden" style="padding:14px;padding-bottom:76px;background:#FFFDFA">
+<button onclick="goBack()" style="width:36px;height:36px;border-radius:12px;border:1px solid #F0EBE3;background:#fff">←</button>
+<h2 style="font-weight:900;margin:10px 0;font-size:15px;color:#0F2E22">بلاغات الأعضاء ⚠️</h2>
+<div style="background:#fff;border-radius:16px;padding:12px;box-shadow:0 8px 24px rgba(0,0,0,.04),0 0 0 1px #F0EBE3;margin-bottom:12px"><input id="rTarget" class="i" placeholder="المبلغ عنه - اسم الشخص أو المنتج"><select id="rType" class="i"><option>🚫 منتج مخالف</option><option>💸 احتيال</option><option>💰 سعر وهمي</option><option>📵 إزعاج</option><option>📌 أخرى</option></select><textarea id="rDesc" class="i" style="height:70px" placeholder="تفاصيل البلاغ بالدقة..."></textarea><button onclick="addReport()" class="b" style="background:#222">إرسال بلاغ آمن 🔒</button></div>
+<div id="reportList"></div>
+</div>
+
+<style>
+.avatar-option{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:all .25s;border:2px solid transparent;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.05)}
+.avatar-option.selected{border-color:#0F3D2E;background:linear-gradient(135deg,#F0F5F2,#fff);transform:scale(1.08);box-shadow:0 8px 20px rgba(15,61,46,.15)}
+.avatar-option:hover{transform:translateY(-2px) scale(1.05);box-shadow:0 8px 20px rgba(0,0,0,.1)}
+</style>
+<div id="screen-profile" class="screen hidden" style="padding:16px;text-align:center;padding-bottom:76px;background:linear-gradient(180deg,#FFFDFA 0%,#F5F1EB 100%)">
+<button onclick="goBack()" style="width:36px;height:36px;border-radius:12px;border:1px solid #F0EBE3;background:#fff;position:absolute;right:14px">←</button>
+<div style="margin-top:20px;background:#fff;border-radius:20px;padding:18px;box-shadow:0 12px 32px rgba(15,61,46,.06),0 0 0 1px #F0EBE3">
+<div style="text-align:center;margin-bottom:12px"><div class="avatar-ring"><div id="profileAvatar" style="font-size:58px;width:86px;height:86px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center">🧑🏿‍🌾</div></div></div>
+<div style="background:#F8F3EB;border-radius:16px;padding:12px;margin-bottom:14px">
+<p style="font-size:10px;font-weight:800;color:#0F2E22;margin-bottom:8px;text-align:center">اختر افتارك المميز ✨</p>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+<div class="avatar-option selected" onclick="pickAvatar('🧑🏿‍🌾',this)" title="مزارع">🧑🏿‍🌾</div>
+<div class="avatar-option" onclick="pickAvatar('👩🏿‍🌾',this)" title="مزارعة">👩🏿‍🌾</div>
+<div class="avatar-option" onclick="pickAvatar('🧔🏿',this)" title="رجل">🧔🏿</div>
+<div class="avatar-option" onclick="pickAvatar('👩🏿',this)" title="مرأة">👩🏿</div>
+<div class="avatar-option" onclick="pickAvatar('👨🏿‍💼',this)" title="تاجر">👨🏿‍💼</div>
+<div class="avatar-option" onclick="pickAvatar('👳🏿‍♂️',this)" title="شيخ">👳🏿‍♂️</div>
+<div class="avatar-option" onclick="pickAvatar('🧕🏿',this)" title="محجبة">🧕🏿</div>
+<div class="avatar-option" onclick="pickAvatar('👨🏿‍🌾',this)" title="فلاح">👨🏿‍🌾</div>
+<div class="avatar-option" onclick="pickAvatar('🦁',this)" title="أسد دارفور">🦁</div>
+<div class="avatar-option" onclick="pickAvatar('🐪',this)" title="جمل">🐪</div>
+<div class="avatar-option" onclick="pickAvatar('🌾',this)" title="زرع">🌾</div>
+<div class="avatar-option" onclick="pickAvatar('⭐',this)" title="نجم">⭐</div>
+</div>
+</div>
+<img id="profileImg" style="width:84px;height:84px;border-radius:50%;object-fit:cover;display:none;margin:0 auto;border:3px solid #fff;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+<h3 id="profileName" style="font-weight:900;margin-top:12px;font-size:16px;color:#0F2E22">مستخدم</h3><p id="profileEmail" style="font-size:11px;color:#8A847C;font-weight:500">email</p>
+<input type="file" id="profileFile" accept="image/*" style="display:none" onchange="previewFile(this,'profileImg')">
+<button onclick="document.getElementById('profileFile').click()" style="margin-top:14px;padding:10px 18px;border-radius:24px;border:1.5px solid #0F3D2E;background:linear-gradient(135deg,#F0F5F2,#fff);color:#0F3D2E;font-size:11px;font-weight:800;box-shadow:0 4px 12px rgba(15,61,46,.08)">📸 تغيير الصورة - فتح المعرض</button><p id="profileImageStatus" style="display:none;color:#16A34A;font-size:9px;margin-top:8px;font-weight:700">✓ تم حفظ الصورة في النظام</p>
+</div>
+<div style="margin-top:16px;text-align:right;display:flex;flex-direction:column;gap:8px"><button onclick="exportDB()" style="padding:12px;border-radius:14px;border:1px solid #DBEAFE;background:linear-gradient(135deg,#EFF6FF,#DBEAFE);color:#1D4ED8;font-size:11px;font-weight:700;box-shadow:0 4px 12px rgba(37,99,235,.1)">⬇️ تصدير بياناتي - نسخة احتياطية</button><button onclick="logout()" style="padding:12px;border-radius:14px;border:1px solid #FEE2E2;background:linear-gradient(135deg,#FEF2F2,#FEE2E2);color:#DC2626;font-size:11px;font-weight:700">🚪 تسجيل خروج آمن</button><button id="adminBtn" onclick="showScreen('admin')" class="hidden" style="padding:14px;border-radius:14px;background:linear-gradient(135deg,#0F3D2E,#1A4D3A);color:#D4A87A;font-size:12px;font-weight:800;box-shadow:0 8px 20px rgba(15,61,46,.25)">🔐 لوحة تحكم الأدمن الاحترافية</button></div>
+</div>
+
+<div id="screen-admin" class="screen hidden" style="padding:14px;padding-bottom:76px;background:linear-gradient(180deg,#0F2E22 0%,#1A4D3A 100%)">
+<button onclick="goBack()" style="width:36px;height:36px;border-radius:12px;border:1px solid rgba(212,168,122,.2);background:rgba(255,255,255,.08);color:#D4A87A;display:flex;align-items:center;justify-content:center">←</button>
+<h2 style="font-weight:900;margin:12px 0 4px;color:#F5E6D3;font-size:18px;display:flex;align-items:center;gap:8px">لوحة تحكم الأدمن <span style="font-size:9px;background:rgba(212,168,122,.15);border:1px solid rgba(212,168,122,.2);color:#D4A87A;padding:3px 8px;border-radius:20px">PRO</span></h2><p style="font-size:10px;color:#A8C4B5;margin-bottom:14px">صلاحيات كاملة • مراقبة حية • تحكم كامل</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0"><div style="background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.03));backdrop-filter:blur(10px);border:1px solid rgba(212,168,122,.15);border-radius:16px;padding:14px"><p style="font-size:9px;color:#A8C4B5;letter-spacing:1px">الأعضاء الجدد</p><p id="statNewUsers" style="font-size:22px;font-weight:900;color:#F5E6D3;margin-top:4px">0</p><p style="font-size:8px;color:#D4A87A;margin-top:2px">اليوم • جديد</p></div><div style="background:linear-gradient(135deg,rgba(255,107,53,.15),rgba(230,126,34,.08));border:1px solid rgba(255,107,53,.2);border-radius:16px;padding:14px"><p style="font-size:9px;color:#FFB896;letter-spacing:1px">المبيعات</p><p id="statSales" style="font-size:22px;font-weight:900;color:#fff;margin-top:4px">0</p><p style="font-size:8px;color:#FFB896;margin-top:2px">منتج نشط</p></div><div style="background:linear-gradient(135deg,rgba(220,38,38,.15),rgba(185,28,28,.08));border:1px solid rgba(220,38,38,.2);border-radius:16px;padding:14px"><p style="font-size:9px;color:#FECACA;letter-spacing:1px">البلاغات</p><p id="statReports" style="font-size:22px;font-weight:900;color:#fff;margin-top:4px">0</p><p style="font-size:8px;color:#FECACA;margin-top:2px">يحتاج مراجعة</p></div><div style="background:linear-gradient(135deg,rgba(212,168,122,.15),rgba(166,124,82,.1));border:1px solid rgba(212,168,122,.2);border-radius:16px;padding:14px"><p style="font-size:9px;color:#D4A87A;letter-spacing:1px">الأرباح</p><p id="statProfit" style="font-size:22px;font-weight:900;color:#F5E6D3;margin-top:4px">0ج</p><p style="font-size:8px;color:#D4A87A;margin-top:2px">عمولة 10%</p></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:14px">
+<button onclick="showAdminTab('users')" style="padding:9px;border-radius:12px;border:1px solid rgba(212,168,122,.3);background:rgba(212,168,122,.12);color:#F5E6D3;font-size:9px;font-weight:800">👥 الأعضاء</button>
+<button onclick="showAdminTab('products')" style="padding:9px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#A8C4B5;font-size:9px;font-weight:600">📦 المبيعات</button>
+<button onclick="showAdminTab('profits')" style="padding:9px;border-radius:12px;border:1px solid #D4A87A;background:linear-gradient(135deg,rgba(212,168,122,.2),rgba(166,124,82,.15));color:#F5E6D3;font-size:9px;font-weight:800">💰 الأرباح</button>
+<button onclick="showAdminTab('reports')" style="padding:9px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#A8C4B5;font-size:9px;font-weight:600">⚠️ البلاغات</button>
+</div>
+<div id="adminContent" style="background:rgba(255,255,255,.04);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:12px;min-height:120px"></div>
+</div>
+
+</div>
+</div>
+<script>
+let currentUser=null,gender='ذكر',historyStack=[],isAdmin=false,avatar='🧑🏿‍🌾';
+function toast(m){let t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2000)}
+function showScreen(id){
+  // 🔒 حماية لوحة الأدمن - فقط الأدمن الحقيقي
+  if(id==='admin'){
+    if(!isAdmin || !currentUser || currentUser.email!=='admin@darfur.market'){
+      toast('❌ صلاحية الأدمن فقط - ممنوع الدخول');
+      console.log('محاولة دخول غير مصرحة للوحة الأدمن:', currentUser?.email);
+      return;
+    }
+  }
+  if(id!=='splash' && id!=='screen-splash'){let cur=document.querySelector('.screen:not(.hidden)'); if(cur) historyStack.push(cur.id);} 
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden')); 
+  let el=document.getElementById(id==='splash'?'splash': 'screen-'+id); if(!el) el=document.getElementById(id); 
+  if(el) el.classList.remove('hidden'); 
+  let tb=document.getElementById('topbar'),bn=document.getElementById('bottomNav'); 
+  if(['home','add','emergency','reports','profile','admin'].includes(id)){
+    tb&&tb.classList.remove('hidden');bn&&bn.classList.remove('hidden'); 
+    if(id==='home') renderProducts(); 
+    if(id==='emergency') renderEmergencies(); 
+    if(id==='reports') renderReports(); 
+    if(id==='admin'){
+      if(!isAdmin){ toast('❌ ممنوع'); showScreen('home'); return; }
+      showAdminTab('users');
+    }
+  } else {tb&&tb.classList.add('hidden');bn&&bn.classList.add('hidden');}
+}
+function goBack(){let p=historyStack.pop(); if(p){document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden')); let e=document.getElementById(p); if(e) e.classList.remove('hidden'); if(p.includes('home')) renderProducts();} else showScreen('login');}
+function setGender(g){gender=g; document.getElementById('gMale').style.borderColor=g==='ذكر'?'#16A34A':'#eee'; document.getElementById('gFemale').style.borderColor=g==='أنثى'?'#16A34A':'#eee';}
+function pickAvatar(a,el){
+  avatar=a;
+  if(el){
+    document.querySelectorAll('.avatar-option').forEach(o=>o.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+  let p=document.getElementById('profileAvatar'); if(p) p.textContent=a;
+  let users=JSON.parse(localStorage.getItem('dm_users')||'[]');
+  if(currentUser){
+    let idx=users.findIndex(u=>u.id===currentUser.id);
+    if(idx>=0){users[idx].avatar=a; localStorage.setItem('dm_users',JSON.stringify(users));}
+    currentUser.avatar=a;
+  }
+  toast('✅ تم اختيار الافتار: '+a);
+}
+function previewFile(inp,imgId){if(!inp.files||!inp.files[0]) return; let f=inp.files[0]; if(f.size>4*1024*1024){toast('الصورة كبيرة');return;} let r=new FileReader(); r.onload=e=>{let img=document.getElementById(imgId); if(img){img.src=e.target.result; img.style.display='block';} localStorage.setItem('temp_'+imgId,e.target.result); let st=document.getElementById(imgId==='prodPreview'?'prodImageStatus':'profileImageStatus'); if(st) st.style.display='block'; if(imgId==='profileImg'){let av=document.getElementById('profileAvatar'); if(av) av.style.display='none'; if(currentUser){currentUser.img=e.target.result; let users=JSON.parse(localStorage.getItem('dm_users')||'[]'); let idx=users.findIndex(u=>u.id===currentUser.id); if(idx>=0){users[idx].img=e.target.result; localStorage.setItem('dm_users',JSON.stringify(users));}} toast('✓ تم حفظ الصورة');} else toast('✓ تم اختيار الصورة');}; r.readAsDataURL(f);}
+
+async function initDB(){
+  if(!localStorage.getItem('dm_products')){
+    localStorage.setItem('dm_products',JSON.stringify([{id:1,name:'فول سوداني',price:15000,loc:'عديلة',state:'شرق دارفور',type:'محاصيل',whatsapp:'249123456789',img:'🥜',commission:1500,orders:0},{id:2,name:'خروف',price:120000,loc:'عديلة',state:'شرق دارفور',type:'مواشي',whatsapp:'249123456789',img:'🐑',commission:12000,orders:2}]));
+  }
+  if(!localStorage.getItem('dm_users')) localStorage.setItem('dm_users','[]');
+  if(!localStorage.getItem('dm_reports')) localStorage.setItem('dm_reports','[]');
+  if(!localStorage.getItem('dm_emer')) localStorage.setItem('dm_emer',JSON.stringify([{id:1,type:'🌧️ مطر غزير',text:'تحذير أمطار في عديلة',time:'الآن'}]));
+  await syncFromSupabase();
+}
+
+function doLogin(){
+  let e=document.getElementById('loginEmail').value.trim().toLowerCase(),p=document.getElementById('loginPass').value.trim();
+  // إخفاء لوحة الأدمن دائما أولا
+  document.getElementById('adminBtn')?.classList.add('hidden');
+  document.getElementById('emergencyAdmin')?.classList.add('hidden');
+  isAdmin=false;
+  if(e==='admin@darfur.market'&&p==='Admin@2024Darfur'){
+    isAdmin=true;
+    currentUser={id:0,name:'الأدمن الرئيسي 👑',email:e,avatar:'👑'};
+    document.getElementById('adminBtn')?.classList.remove('hidden');
+    document.getElementById('emergencyAdmin')?.classList.remove('hidden');
+    document.getElementById('profileName').textContent='الأدمن الرئيسي 👑';
+    document.getElementById('profileEmail').textContent=e;
+    document.getElementById('profileAvatar').textContent='👑';
+    document.getElementById('profileImg').style.display='none';
+    document.getElementById('profileAvatar').style.display='flex';
+    toast('✅ مرحبا أدمن - صلاحيات كاملة');
+    showScreen('admin');
+    updateStats();
+    return;
+  }
+  let users=JSON.parse(localStorage.getItem('dm_users')||'[]');
+  let u=users.find(x=>x.email.toLowerCase()===e&&x.pass===p);
+  if(!u){toast('❌ البريد أو كلمة السر خطأ');return;}
+  currentUser=u;
+  isAdmin=false; // مستخدم عادي - لا صلاحيات أدمن أبدا
+  document.getElementById('adminBtn')?.classList.add('hidden');
+  document.getElementById('emergencyAdmin')?.classList.add('hidden');
+  document.getElementById('profileName').textContent=u.name;
+  document.getElementById('profileEmail').textContent=u.email;
+  document.getElementById('profileAvatar').textContent=u.avatar||'🧑🏿‍🌾';
+  document.getElementById('profileAvatar').style.display='flex';
+  if(u.img){document.getElementById('profileImg').src=u.img; document.getElementById('profileImg').style.display='block'; document.getElementById('profileAvatar').style.display='none';}
+  else{document.getElementById('profileImg').style.display='none';}
+  toast('✅ مرحبا '+u.name);
+  showScreen('home');
+}
+function doRegister(){let n=document.getElementById('regName').value.trim(),em=document.getElementById('regEmail').value.trim().toLowerCase(),pa=document.getElementById('regPass').value,pa2=document.getElementById('regPass2').value; if(!n){toast('الاسم بالكامل');return;} if(!em){toast('بريد الكتروني');return;} if(!pa){toast('كلمه السر');return;} if(pa!==pa2){toast('تاكيد غير متطابق');return;} if(!document.getElementById('terms').checked){toast('وافق الشروط');return;} let users=JSON.parse(localStorage.getItem('dm_users')||'[]'); if(users.find(u=>u.email.toLowerCase()===em)){toast('البريد موجود');return;} users.push({id:Date.now(),name:n,email:em,pass:pa,gender,avatar,created:new Date().toISOString()}); localStorage.setItem('dm_users',JSON.stringify(users)); toast('✅ تم يلا راح سجل معانا يازول'); setTimeout(()=>showScreen('login'),700);}
+function doForgot(){let e=document.getElementById('forgotEmail').value.trim().toLowerCase(); if(!e){toast('بريدك');return;} if(e==='admin@darfur.market'){document.getElementById('forgotStep1').classList.add('hidden');document.getElementById('forgotStep2').classList.remove('hidden');document.getElementById('forgotUserInfo').innerHTML='✅ الأدمن - Admin@2024Darfur'; window._re=e; return;} let users=JSON.parse(localStorage.getItem('dm_users')||'[]'); let u=users.find(x=>x.email.toLowerCase()===e); if(!u){toast('غير موجود');return;} document.getElementById('forgotStep1').classList.add('hidden');document.getElementById('forgotStep2').classList.remove('hidden');document.getElementById('forgotUserInfo').innerHTML='✅ '+u.name; window._re=e;}
+function doResetPassword(){let p1=document.getElementById('newPass').value.trim(),p2=document.getElementById('newPass2').value.trim(); if(!p1||!p2){toast('كلمة السر');return;} if(p1!==p2){toast('غير متطابق');return;} let email=window._re; if(email==='admin@darfur.market'){toast('تم'); setTimeout(()=>{document.getElementById('forgotStep1').classList.remove('hidden');document.getElementById('forgotStep2').classList.add('hidden'); showScreen('login');},500); return;} let users=JSON.parse(localStorage.getItem('dm_users')||'[]'); let idx=users.findIndex(x=>x.email.toLowerCase()===email); if(idx>=0){users[idx].pass=p1; localStorage.setItem('dm_users',JSON.stringify(users)); toast('✅ تم تغيير كلمة السر'); document.getElementById('forgotStep1').classList.remove('hidden');document.getElementById('forgotStep2').classList.add('hidden'); setTimeout(()=>showScreen('login'),600);}}
+async function renderProducts(){
+  if(supabaseClient) await syncFromSupabase();
+  let se=document.getElementById('stateSel'),st=se?se.value:'كل دارفور',le=document.getElementById('locSel'),lo=le?le.value:'الكل',prods=JSON.parse(localStorage.getItem('dm_products')||'[]'),fil=prods.filter(p=>{if(st==='كل دارفور') return true; if(lo&&lo!=='الكل') return p.loc===lo; return p.state===st;}),grid=document.getElementById('productGrid'); 
+  if(!grid) return; grid.innerHTML=''; 
+  if(!fil.length){grid.innerHTML='<div style="grid-column:span 2;text-align:center;padding:16px;color:#999;font-size:11px">لا منتجات - كن أول من يبيع</div>';return;} 
+  fil.forEach(p=>{
+    let deleteBtn = isAdmin ? `<button onclick="event.stopPropagation(); delProd(${p.id})" style="position:absolute;top:6px;left:6px;width:28px;height:28px;background:linear-gradient(135deg,#DC2626,#991B1B);color:#fff;border:2px solid #fff;border-radius:50%;font-size:14px;font-weight:900;box-shadow:0 4px 12px rgba(220,38,38,.5);z-index:10;display:flex;align-items:center;justify-content:center;cursor:pointer">×</button>` : '';
+    let cardOverflow = isAdmin ? 'overflow:visible' : '';
+    grid.innerHTML+=`<div class="card" onclick="orderProduct(${p.id})" style="cursor:pointer;position:relative;${cardOverflow}">${deleteBtn}<div style="text-align:center;position:relative">${p.imgBase64?`<img src="${p.imgBase64}" style="width:100%;height:70px;object-fit:cover;border-radius:12px">`: `<div style="font-size:28px;padding:8px 0">${p.img||'📦'}</div>`}<span style="position:absolute;top:4px;right:4px;font-size:7px;background:linear-gradient(135deg,#0F3D2E,#164E3B);color:#F5E6D3;padding:2px 6px;border-radius:10px;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.15)">${p.type||''}</span></div><p style="font-weight:800;font-size:11px;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#0F2E22">${p.name}</p><p style="color:#FF6B35;font-weight:900;font-size:12px">💰 ${p.price}ج</p><p style="font-size:8px;color:#8A847C">📍 ${p.loc||''}</p><p style="font-size:8px;color:#25D366;font-weight:700">📱 ${p.whatsapp||''}</p><div style="display:flex;gap:4px;margin-top:6px"><button style="flex:1;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border:none;padding:6px;border-radius:10px;font-size:9px;font-weight:800">اطلب الآن</button><span style="font-size:7px;background:#F0FDF4;color:#166534;padding:3px 6px;border-radius:10px;font-weight:800;border:1px solid #BBF7D0">ربح ${p.commission||0}</span></div></div>`;
+  });
+}
+function updateLocalities(){let se=document.getElementById('stateSel'); if(!se) return; let st=se.value,le=document.getElementById('locSel'); if(!le) return; le.innerHTML=''; let m={"شرق دارفور":["عديلة","الضعين"],"جنوب دارفور":["نيالا","كاس"],"شمال دارفور":["الفاشر","كتم"],"غرب دارفور":["الجنينة"],"وسط دارفور":["زالنجي"],"كل دارفور":["عديلة","نيالا","الفاشر","الجنينة"]}; (m[st]||[]).forEach(l=>{let o=document.createElement('option'); o.textContent=l; o.value=l; le.appendChild(o);}); let a=document.createElement('option'); a.textContent='الكل'; a.value='الكل'; le.insertBefore(a,le.firstChild); renderProducts(); let lt=document.getElementById('locText'); if(lt) lt.textContent=st;}
+function filterProducts(){renderProducts();}
+
+async function addProduct(){
+  let n=document.getElementById('pName').value.trim(),pr=document.getElementById('pPrice').value.trim(),ty=document.getElementById('pType').value,wa=document.getElementById('pWhatsapp').value.trim(),st=document.getElementById('pState').value,lo=document.getElementById('pLoc').value.trim()||'عديلة';
+  if(!n){toast('اسم المنتج');return;}
+  if(!pr){toast('السعر');return;}
+  if(!wa){toast('واتساب');return;}
+  let img=localStorage.getItem('temp_prodPreview')||'';
+  let comm=Math.round(parseInt(pr)*0.1);
+  // حفظ محلي أولا (سريع)
+  let prods=JSON.parse(localStorage.getItem('dm_products')||'[]');
+  prods.unshift({id:Date.now(),name:n,price:pr,type:ty,whatsapp:wa,loc:lo,state:st,img:img?'':'📦',imgBase64:img,commission:comm,orders:0,seller:currentUser?.name||'مستخدم'});
+  localStorage.setItem('dm_products',JSON.stringify(prods));
+  localStorage.removeItem('temp_prodPreview');
+  let pp=document.getElementById('prodPreview'); if(pp){pp.style.display='none'; pp.src='';}
+  let ps=document.getElementById('prodImageStatus'); if(ps) ps.style.display='none';
+  document.getElementById('pName').value=''; document.getElementById('pPrice').value=''; document.getElementById('pWhatsapp').value='';
+  toast('⏳ جاري النشر لكل دارفور...');
+  // حفظ في Supabase (لكل الناس)
+  if(supabaseClient){
+    try{
+      const {error} = await supabaseClient.from('products').insert([{product_name:n, price: isNaN(parseFloat(pr))? pr : parseFloat(pr), product_type:ty, whatsapp:wa, location:lo, state:st, image_base64:img }]);
+      if(error) console.log('Supabase insert error', error);
+    }catch(e){ console.log(e); }
+  }
+  toast('✅ نشر - ربح '+comm+'ج - يراه كل دارفور');
+  showScreen('home');
+  renderProducts();
+}
+
+function orderProduct(id){let prods=JSON.parse(localStorage.getItem('dm_products')||'[]'),p=prods.find(x=>x.id===id); if(!p) return; p.orders=(p.orders||0)+1; localStorage.setItem('dm_products',JSON.stringify(prods)); let m=document.createElement('div'); m.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px'; m.innerHTML=`<div style="background:#fff;border-radius:16px;padding:16px;max-width:300px;width:100%;text-align:center"><div style="font-size:36px">✅</div><h3 style="font-weight:800;margin:8px 0;font-size:14px">تم استلام طلبك!</h3><p style="font-size:11px;color:#555">المنتج: <b>${p.name}</b><br>السعر: <b style="color:#EA580C">${p.price}ج</b><br>النوع: ${p.type||''}<br>المكان: ${p.loc} - ${p.state}</p><p style="font-size:10px;background:#F0FDF4;padding:7px;border-radius:8px;margin:10px 0;border:1px solid #BBF7D0">💰 ربحك: <b>${p.commission||0}ج</b> | طلبات: ${p.orders}</p><button onclick="window.open('https://wa.me/${p.whatsapp.replace(/[^0-9]/g,'')}?text=أريد ${encodeURIComponent(p.name)}','_blank')" style="width:100%;background:#25D366;color:#fff;border:none;padding:10px;border-radius:10px;font-weight:800;font-size:12px">📱 واتساب ${p.whatsapp}</button><button onclick="this.closest('div').parentElement.remove()" style="width:100%;margin-top:6px;background:#eee;border:none;padding:8px;border-radius:10px;font-size:11px">إغلاق</button></div>`; m.onclick=e=>{if(e.target===m) m.remove()}; document.body.appendChild(m);}
+function renderEmergencies(){let list=JSON.parse(localStorage.getItem('dm_emer')||'[]'),div=document.getElementById('emergencyList'),ad=document.getElementById('emergencyAdmin'); if(ad){if(isAdmin) ad.classList.remove('hidden'); else ad.classList.add('hidden');} if(!div) return; div.innerHTML=''; if(!list.length){div.innerHTML='<p style="font-size:11px;color:#999;text-align:center">لا تنبيهات</p>';return;} list.forEach(e=>{let del=isAdmin?`<button onclick="delEmergency(${e.id})" style="font-size:8px;color:#DC2626;background:#FEE2E2;border:1px solid #FECACA;padding:2px 6px;border-radius:8px;margin-top:4px">حذف</button>`:''; div.innerHTML+=`<div style="border:1px solid #FECACA;background:#FEF2F2;border-radius:10px;padding:8px;margin-bottom:6px"><div style="display:flex;justify-content:space-between"><b style="font-size:10px">${e.type}</b><span style="font-size:8px;color:#888">${e.time}</span></div><p style="font-size:11px;margin-top:3px">${e.text}</p>${del}</div>`;});}
+
+async function addEmergency(){
+  if(!isAdmin){toast('صلاحية أدمن فقط');return;}
+  let t=document.getElementById('eType'),txt=document.getElementById('eText');
+  if(!txt.value.trim()){toast('نص التنبيه');return;}
+  let list=JSON.parse(localStorage.getItem('dm_emer')||'[]');
+  list.unshift({id:Date.now(),type:t.value,text:txt.value.trim(),time:'الآن'});
+  localStorage.setItem('dm_emer',JSON.stringify(list));
+  txt.value='';
+  if(supabaseClient){
+    try{ await supabaseClient.from('emergency_alerts').insert([{title:t.value, description:list[0].text, location:'دارفور'}]); }catch(e){}
+  }
+  renderEmergencies();
+  toast('✅ نشر طوارئ لكل دارفور');
+}
+
+function delEmergency(id){if(!isAdmin) return; let list=JSON.parse(localStorage.getItem('dm_emer')||'[]'); localStorage.setItem('dm_emer',JSON.stringify(list.filter(x=>x.id!==id))); renderEmergencies();}
+function addReport(){let tar=document.getElementById('rTarget'); if(!tar.value.trim()){toast('المبلغ عنه');return;} let ty=document.getElementById('rType'),de=document.getElementById('rDesc'),reps=JSON.parse(localStorage.getItem('dm_reports')||'[]'); reps.unshift({id:Date.now(),target:tar.value.trim(),type:ty.value,desc:de.value,by:currentUser?.name||'مجهول',time:new Date().toLocaleString()}); localStorage.setItem('dm_reports',JSON.stringify(reps)); tar.value=''; de.value=''; toast('✅ بلاغ'); renderReports();}
+function renderReports(){let reps=JSON.parse(localStorage.getItem('dm_reports')||'[]'),div=document.getElementById('reportList'); if(!div) return; div.innerHTML=reps.length?reps.map(r=>`<div style="border:1px solid #eee;border-radius:10px;padding:8px;margin-bottom:6px"><b style="font-size:10px">${r.target} - ${r.type}</b><p style="font-size:10px;margin-top:3px">${r.desc||''}</p><p style="font-size:8px;color:#888">${r.by}</p></div>`).join(''):'<p style="font-size:11px;color:#999">لا بلاغات</p>';}
+function updateStats(){
+  try{
+    let u=JSON.parse(localStorage.getItem('dm_users')||'[]'),p=JSON.parse(localStorage.getItem('dm_products')||'[]'),r=JSON.parse(localStorage.getItem('dm_reports')||'[]'),em=JSON.parse(localStorage.getItem('dm_emer')||'[]');
+    let totalOrders = p.reduce((s,x)=>s+(x.orders||0),0);
+    let totalProfit = p.reduce((s,x)=>s+((x.commission||0)*(x.orders||0)),0);
+    let today=new Date().toDateString(),newU=u.filter(x=>x.created&&new Date(x.created).toDateString()===today).length;
+    let e;
+    e=document.getElementById('statNewUsers'); if(e) e.textContent=newU;
+    e=document.getElementById('statSales'); if(e) e.textContent=p.length;
+    e=document.getElementById('statReports'); if(e) e.textContent=r.length;
+    e=document.getElementById('statProfit'); if(e) e.textContent=totalProfit+'ج';
+    // حفظ الأرباح في localStorage للمراجعة
+    localStorage.setItem('dm_total_profit', totalProfit);
+    localStorage.setItem('dm_total_orders', totalOrders);
+  }catch(e){}
+}
+function showAdminTab(t){
+  if(!isAdmin){ toast('❌ لوحة الأدمن للأدمن فقط'); showScreen('home'); return; }
+  updateStats();
+  let u=JSON.parse(localStorage.getItem('dm_users')||'[]'),p=JSON.parse(localStorage.getItem('dm_products')||'[]'),r=JSON.parse(localStorage.getItem('dm_reports')||'[]'),c=document.getElementById('adminContent');
+  if(!c) return;
+  if(t==='users'){
+    c.innerHTML=u.length?u.map(x=>`<div style="border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);border-radius:10px;padding:8px;margin-bottom:6px;display:flex;justify-content:space-between;font-size:10px;color:#F5E6D3"><div><b>${x.name}</b><br><span style="color:#A8C4B5;font-size:9px">${x.email} - ${x.gender||''}</span></div><button onclick="delUser(${x.id})" style="color:#FCA5A5;border:none;background:none;font-weight:700">حذف</button></div>`).join(''):'<p style="font-size:11px;color:#A8C4B5">لا مستخدمين</p>';
+  } else if(t==='products'){
+    c.innerHTML=p.length?p.map(x=>`<div style="border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);border-radius:10px;padding:8px;margin-bottom:6px;font-size:10px;color:#F5E6D3;display:flex;justify-content:space-between;align-items:center"><span>📦 ${x.name}<br><span style="font-size:8px;color:#A8C4B5">${x.price}ج • طلبات:${x.orders||0} • ربح:${(x.commission||0)*(x.orders||0)}ج • واتساب:${x.whatsapp||''}</span></span><button onclick="delProd(${x.id})" style="color:#FCA5A5;border:none;background:rgba(220,38,38,.15);padding:4px 8px;border-radius:8px;font-size:9px">حذف</button></div>`).join(''):'<p style="font-size:11px;color:#A8C4B5">لا منتجات</p>';
+  } else if(t==='profits'){
+    let totalOrders = p.reduce((s,x)=>s+(x.orders||0),0);
+    let totalProfit = p.reduce((s,x)=>s+((x.commission||0)*(x.orders||0)),0);
+    let totalSales = p.reduce((s,x)=>s+((parseInt(x.price)||0)*(x.orders||0)),0);
+    let topProduct = p.length ? p.reduce((max, cur)=> (cur.orders||0) > (max.orders||0) ? cur : max, p[0]) : null;
+    c.innerHTML = `
+      <div style="background:linear-gradient(135deg,#D4A87A,#A67C52);border-radius:14px;padding:14px;margin-bottom:10px;color:#0F2E22">
+        <p style="font-size:10px;font-weight:800;letter-spacing:1px">💰 إجمالي الأرباح</p>
+        <p style="font-size:28px;font-weight:900;margin:6px 0">${totalProfit} جنيه</p>
+        <div style="display:flex;gap:12px;font-size:9px;font-weight:700;margin-top:6px">
+          <span>📊 مبيعات: ${totalSales}ج</span><span>📦 طلبات: ${totalOrders}</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px"><p style="font-size:8px;color:#A8C4B5">عمولة لكل منتج</p><p style="font-size:14px;font-weight:800;color:#F5E6D3;margin-top:2px">10%</p></div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px"><p style="font-size:8px;color:#A8C4B5">أكثر منتج طلبا</p><p style="font-size:10px;font-weight:800;color:#F5E6D3;margin-top:2px">${topProduct ? topProduct.name+' ('+(topProduct.orders||0)+')' : 'لا يوجد'}</p></div>
+      </div>
+      <p style="font-size:10px;font-weight:800;color:#D4A87A;margin-bottom:8px">📋 تفاصيل الأرباح لكل منتج:</p>
+      ${p.length ? p.map(x=>{
+        let profit = (x.commission||0)*(x.orders||0);
+        return `<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:8px;margin-bottom:6px;font-size:9px;color:#F5E6D3">
+          <div style="display:flex;justify-content:space-between"><b>${x.img||'📦'} ${x.name}</b><span style="color:#D4A87A;font-weight:800">${profit}ج ربح</span></div>
+          <div style="color:#A8C4B5;margin-top:3px;display:flex;gap:8px"><span>💰 ${x.price}ج</span><span>📦 طلبات: ${x.orders||0}</span><span>🔖 عمولة: ${x.commission||0}ج/طلب</span></div>
+          <div style="color:#8A847C;font-size:8px;margin-top:2px">📍 ${x.loc} - 📱 ${x.whatsapp}</div>
+        </div>`;
+      }).join('') : '<p style="font-size:10px;color:#A8C4B5">لا توجد مبيعات بعد</p>'}
+      <div style="margin-top:12px;background:rgba(212,168,122,.1);border:1px solid rgba(212,168,122,.2);border-radius:10px;padding:10px">
+        <p style="font-size:9px;color:#D4A87A;font-weight:800">💡 كيف تربح؟</p>
+        <p style="font-size:9px;color:#A8C4B5;margin-top:4px;line-height:14px">• كل منتج ينباع تربح 10% عمولة تلقائيا<br>• مثلا: منتج ب 15000ج تربح 1500ج لكل طلب<br>• الأرباح تظهر هنا مباشرة عند كل طلب<br>• التواصل يتم عبر واتساب البائع</p>
+      </div>
+    `;
+  } else {
+    c.innerHTML=r.length?r.map(x=>`<div style="border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);border-radius:10px;padding:8px;margin-bottom:6px;font-size:10px;color:#F5E6D3"><b>⚠️ ${x.target} - ${x.type}</b><p style="color:#A8C4B5;margin-top:3px">${x.desc||''}</p><p style="font-size:8px;color:#8A847C;margin-top:3px">${x.by} - ${x.time}</p></div>`).join(''):'<p style="font-size:11px;color:#A8C4B5">لا بلاغات</p>';
+  }
+}
+function delUser(id){
+  if(!isAdmin){ toast('❌ للأدمن فقط'); return; }
+  if(!confirm('حذف العضو؟')) return;
+  let u=JSON.parse(localStorage.getItem('dm_users')||'[]');
+  localStorage.setItem('dm_users',JSON.stringify(u.filter(x=>x.id!==id)));
+  showAdminTab('users'); updateStats();
+  toast('تم حذف العضو');
+}
+function delProd(id){
+  if(!isAdmin || currentUser?.email!=='admin@darfur.market'){
+    toast('❌ حذف المنتج للأدمن فقط');
+    return;
+  }
+  if(!confirm('هل أنت متأكد من حذف هذا المنتج؟ - صلاحية أدمن')) return;
+  let p=JSON.parse(localStorage.getItem('dm_products')||'[]');
+  localStorage.setItem('dm_products',JSON.stringify(p.filter(x=>x.id!==id)));
+  showAdminTab('products');
+  renderProducts();
+  updateStats();
+  toast('🗑️ تم حذف المنتج - صلاحية أدمن');
+}
+function exportDB(){let d={users:JSON.parse(localStorage.getItem('dm_users')||'[]'),products:JSON.parse(localStorage.getItem('dm_products')||'[]'),reports:JSON.parse(localStorage.getItem('dm_reports')||'[]'),emergencies:JSON.parse(localStorage.getItem('dm_emer')||'[]')}; let b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a'); a.href=u; a.download='darfur.json'; a.click(); toast('تم التصدير');}
+function logout(){
+  currentUser=null;
+  isAdmin=false;
+  historyStack=[];
+  localStorage.removeItem('isAdmin'); // مسح أي محاولة تلاعب
+  document.getElementById('adminBtn')?.classList.add('hidden');
+  document.getElementById('emergencyAdmin')?.classList.add('hidden');
+  // إخفاء كل أزرار الحذف
+  document.querySelectorAll('[onclick^="delProd"]').forEach(b=>b.style.display='none');
+  showScreen('login');
+  toast('تم الخروج - كل صلاحيات الأدمن ألغيت');
+}
+initDB(); updateLocalities(); showScreen('splash'); setTimeout(()=>{showScreen('login')},900);
+</script>
+</body>
+</html>
