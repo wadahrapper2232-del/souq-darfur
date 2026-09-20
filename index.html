@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دارفور ماركت - Darfur Market</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+// EmailJS Config - جاهز للربط مع Gmail
+// بعد الرفع في Lovable، غير القيم دي بقيمك الحقيقية من EmailJS
+const EMAILJS_CONFIG = {
+  publicKey: "YOUR_PUBLIC_KEY", // من EmailJS Dashboard
+  serviceId: "service_gmail", // Gmail Service
+  templateWelcome: "template_welcome", // ترحيب
+  templateReset: "template_reset" // استعادة كلمة السر
+};
+// تفعيل EmailJS
+if(typeof emailjs !== 'undefined'){
+  emailjs.init(EMAILJS_CONFIG.publicKey);
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+<style>*{font-family:'Tajawal',sans-serif} .no-scrollbar::-webkit-scrollbar{display:none} body{margin:0}</style>
+</head>
+<body class="bg-[#FFF8F0] min-h-screen flex justify-center">
+<div id="app" class="w-full max-w-[430px] bg-white min-h-screen shadow-2xl relative flex flex-col">
+
+<div id="topbar" class="hidden bg-white border-b px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+  <div class="flex items-center gap-2">
+    <button onclick="goBack()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">←</button>
+    <span class="font-extrabold text-[#1A5D1A]">دارفور ماركت</span>
+    <span class="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full">DB:متصل</span>
+  </div>
+  <div class="flex items-center gap-1">
+    <span onclick="getLocationAuto()" class="text-[10px] bg-gray-100 px-2 py-1 rounded-full cursor-pointer border border-green-300">📍 <span id="locText">عديلة - شرق دارفور</span></span>
+    <span class="text-[10px] bg-blue-50 px-2 py-1 rounded-full border">☀️ <span id="weatherText">34° حار</span></span>
+  </div>
+</div>
+
+<div id="screens" class="flex-1 overflow-y-auto no-scrollbar bg-white">
+
+<div id="screen-splash" class="screen flex flex-col min-h-[100vh] justify-center items-center relative" style="background:#1E1A14;">
+  <div class="text-center flex flex-col items-center">
+    <!-- Icon like in image - brown rounded square with cart -->
+    <div class="w-28 h-28 rounded-[24px] flex items-center justify-center mb-8 shadow-2xl" style="background:linear-gradient(135deg,#A66A3D 0%,#8B4E2A 100%);">
+      <span class="text-5xl">🛒</span>
+    </div>
+    <h1 class="text-[36px] font-extrabold mb-2" style="color:#D4A87A; letter-spacing:-1px;">سوق دارفور</h1>
+    <p class="text-[15px] font-medium" style="color:#8B7355;">شرق دارفور - الضعين</p>
+    <p class="text-[12px] mt-1" style="color:#5A4A3A;" id="gpsSplash">عديلة - يتم تحديد الموقع...</p>
+    <!-- 3 dots loading like image -->
+    <div class="flex gap-2 mt-12">
+      <div class="w-2.5 h-2.5 rounded-full animate-bounce" style="background:#E67E22; animation-delay:0s;"></div>
+      <div class="w-2.5 h-2.5 rounded-full animate-bounce" style="background:#E67E22; animation-delay:0.2s;"></div>
+      <div class="w-2.5 h-2.5 rounded-full animate-bounce" style="background:#E67E22; animation-delay:0.4s;"></div>
+    </div>
+  </div>
+  <div class="absolute bottom-8 left-6 right-6 space-y-3">
+    <div class="grid grid-cols-3 gap-2 text-[10px] text-center mb-4">
+      <div class="bg-white/10 backdrop-blur rounded-xl p-2"><p class="font-bold text-white text-sm" id="dbUsers">0</p><p style="color:#8B7355;">مستخدم</p></div>
+      <div class="bg-white/10 backdrop-blur rounded-xl p-2"><p class="font-bold text-white text-sm" id="dbProds">0</p><p style="color:#8B7355;">منتج</p></div>
+      <div class="bg-white/10 backdrop-blur rounded-xl p-2"><p class="font-bold text-white text-sm" id="dbReports">0</p><p style="color:#8B7355;">بلاغ</p></div>
+    </div>
+    <button onclick="showScreen('login')" class="w-full py-4 rounded-2xl font-bold text-white shadow-xl" style="background:#E86A2C;">ابدأ الآن - دخول</button>
+  </div>
+</div>
+
+<div id="screen-login" class="screen hidden p-6">
+  <button onclick="goBack()" class="mb-4 w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">←</button>
+  <h2 class="text-2xl font-bold">مرحباً بعودتك 👋</h2>
+  <p class="text-xs text-gray-500 mt-1">admin@darfur.market / Admin@2024Darfur</p>
+  <input id="loginEmail" placeholder="البريد الإلكتروني" class="w-full border-2 rounded-xl p-3 mb-3 text-sm mt-6 outline-none focus:border-orange-400">
+  <input id="loginPass" type="password" placeholder="كلمة السر" class="w-full border-2 rounded-xl p-3 mb-4 text-sm outline-none focus:border-orange-400">
+  <button onclick="doLogin()" class="w-full bg-[#E86A2C] text-white py-3 rounded-xl font-bold">دخول</button>
+  <div class="flex justify-between mt-4 text-xs">
+    <button onclick="showScreen('forgot')" class="text-orange-600">نسيت كلمة السر؟</button>
+    <button onclick="showScreen('register')" class="text-green-700 font-bold">إنشاء حساب</button>
+  </div>
+</div>
+
+<div id="screen-register" class="screen hidden p-5">
+  <button onclick="goBack()" class="mb-2 w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">←</button>
+  <h2 class="font-bold">إنشاء حساب جديد</h2>
+  <div class="flex gap-2 my-3">
+    <div onclick="pickAvatar('🧑🏿‍🌾')" class="flex-1 text-center border-2 rounded-xl py-3 cursor-pointer hover:bg-orange-50">🧑🏿‍🌾</div>
+    <div onclick="pickAvatar('👩🏿‍🌾')" class="flex-1 text-center border-2 rounded-xl py-3 cursor-pointer hover:bg-orange-50">👩🏿‍🌾</div>
+    <div onclick="pickAvatar('🧔🏿')" class="flex-1 text-center border-2 rounded-xl py-3 cursor-pointer hover:bg-orange-50">🧔🏿</div>
+  </div>
+  <div id="avatarPreview" class="text-center text-4xl mb-2">🧑🏿‍🌾</div>
+  <label class="text-[11px] font-bold">صورة الملف الشخصي (اختياري)</label>
+  <input type="file" id="regImage" accept="image/*" class="w-full text-[11px] mb-2 border rounded p-1">
+  <img id="regPreview" class="w-16 h-16 rounded-full object-cover hidden mx-auto mb-3 border-2 border-green-500">
+  <input id="regName" placeholder="الاسم الكامل *" class="w-full border-2 rounded-xl p-3 mb-2 text-sm outline-none">
+  <input id="regEmail" placeholder="Gmail *" class="w-full border-2 rounded-xl p-3 mb-2 text-sm outline-none">
+  <div class="flex gap-2 mb-3">
+    <button id="gMale" onclick="setGender('ذكر')" class="flex-1 border-2 rounded-xl py-2 text-xs bg-green-50 border-green-600 font-bold">ذكر</button>
+    <button id="gFemale" onclick="setGender('أنثى')" class="flex-1 border-2 rounded-xl py-2 text-xs">أنثى</button>
+  </div>
+  <input id="regPass" type="password" placeholder="كلمة السر *" class="w-full border-2 rounded-xl p-3 mb-2 text-sm outline-none">
+  <input id="regPass2" type="password" placeholder="تأكيد كلمة السر *" class="w-full border-2 rounded-xl p-3 mb-3 text-sm outline-none">
+  <label class="text-[11px] flex gap-2 mb-4"><input type="checkbox" id="terms"> أوافق على الشروط</label>
+  <button onclick="doRegister()" class="w-full bg-[#1A5D1A] text-white py-3 rounded-xl font-bold text-sm">إنشاء الحساب</button>
+</div>
+
+<div id="screen-forgot" class="screen hidden p-6">
+  <button onclick="goBack()" class="mb-4 w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">←</button>
+  <h2 class="font-bold">نسيت كلمة السر؟</h2>
+  <input id="forgotEmail" placeholder="بريدك الإلكتروني" class="w-full border-2 rounded-xl p-3 mb-3 mt-6 text-sm">
+  <button onclick="doForgot()" class="w-full bg-[#E86A2C] text-white py-3 rounded-xl text-sm font-bold">إرسال رابط الاستعادة</button>
+</div>
+
+<div id="screen-home" class="screen hidden">
+  <div class="p-3">
+    <div class="flex gap-2 mb-2">
+      <select id="stateSel" onchange="updateLocalities()" class="flex-1 border-2 border-green-600 rounded-xl p-2.5 text-[11px] bg-green-50 font-bold outline-none">
+        <option value="كل دارفور">🌍 كل دارفور - كل الناس</option>
+        <option value="جنوب دارفور">جنوب دارفور</option>
+        <option value="شمال دارفور">شمال دارفور</option>
+        <option value="غرب دارفور">غرب دارفور</option>
+        <option value="شرق دارفور" selected>شرق دارفور</option>
+        <option value="وسط دارفور">وسط دارفور</option>
+      </select>
+      <select id="locSel" onchange="filterProducts()" class="flex-1 border-2 rounded-xl p-2.5 text-[11px] bg-white outline-none"></select>
+    </div>
+    <p id="showingText" class="text-[10px] text-center text-green-700 mb-2 font-bold bg-green-50 py-1 rounded-full">🌍 عديلة - كل الناس</p>
+    <div id="productGrid" class="grid grid-cols-2 gap-2.5"></div>
+  </div>
+</div>
+
+<div id="screen-add" class="screen hidden p-4">
+  <button onclick="goBack()" class="mb-3 w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">←</button>
+  <h2 class="font-bold text-sm">إضافة منتج / مبيعات</h2>
+  <p class="text-[10px] text-gray-500 mb-3">الاسم والنوع اختياري - اكتب براك ✍️</p>
+  <div class="border-2 border-dashed border-orange-300 rounded-2xl p-4 text-center mb-4 bg-orange-50/30">
+    <img id="prodPreview" class="w-full h-44 object-cover rounded-xl hidden mb-3 border-2">
+    <input type="file" id="prodImage" accept="image/*" class="hidden">
+    <button onclick="document.getElementById('prodImage').click()" class="bg-[#E86A2C] text-white px-5 py-2.5 rounded-full text-xs font-bold shadow">📸 اختر صورة المنتج من المعرض</button>
+    <p id="prodImageStatus" class="text-[10px] text-green-600 mt-2 hidden font-bold">✓ تم اختيار الصورة</p>
+  </div>
+  <label class="text-xs font-bold">اسم المنتج / المبيعات - اكتب براك (اختياري) ✍️</label>
+  <input id="pName" placeholder="مثال: عسل، فول، خروف..." class="w-full border-2 border-orange-200 rounded-xl p-3 mb-3 text-sm bg-white outline-none focus:border-orange-400">
+  <label class="text-xs font-bold">نوع المنتج / المحاصيل - اكتب براك (اختياري) ✍️</label>
+  <input id="pType" placeholder="مثال: محاصيل، مواشي، عسل..." class="w-full border-2 border-green-200 rounded-xl p-3 mb-3 text-sm bg-white outline-none focus:border-green-400">
+  <div class="flex gap-2 mb-3">
+    <div class="flex-1"><label class="text-xs font-bold">السعر (ج) *</label><input id="pPrice" type="number" placeholder="15000" class="w-full border-2 rounded-xl p-3 text-sm outline-none"></div>
+    <div class="flex-1"><label class="text-xs font-bold">الكمية</label><input id="pQty" placeholder="25 كيلو" class="w-full border-2 rounded-xl p-3 text-sm outline-none"></div>
+  </div>
+  <textarea id="pDesc" placeholder="وصف المنتج..." class="w-full border-2 rounded-xl p-3 mb-4 text-sm h-20 outline-none"></textarea>
+  <button onclick="addProduct()" class="w-full bg-[#E86A2C] text-white py-4 rounded-xl font-bold text-sm shadow-lg">🚀 نشر - يراه كل الناس في دارفور</button>
+</div>
+
+<div id="screen-emergency" class="screen hidden p-4">
+  <button onclick="goBack()" class="mb-3 w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">←</button>
+  <h2 class="font-bold text-red-600 text-sm">🚨 طوارئ دارفور - يراه كل الناس</h2>
+  <div id="emergencyList" class="space-y-2 mt-3 mb-4"></div>
+  <div id="emergencyAdmin" class="hidden border-t pt-3 mt-4">
+    <p class="text-xs font-bold mb-2">أدمن - إضافة تنبيه</p>
+    <select id="eType" class="w-full border-2 rounded-xl p-2 mb-2 text-xs"><option>مطر غزير</option><option>عاصفة ترابية</option><option>إغاثة</option><option>سيول</option></select>
+    <input id="eText" placeholder="نص التنبيه" class="w-full border-2 rounded-xl p-2 mb-2 text-xs">
+    <button onclick="addEmergency()" class="w-full bg-red-600 text-white py-2.5 rounded-xl text-xs font-bold">نشر تنبيه لكل دارفور</button>
+  </div>
+</div>
+
+<div id="screen-reports" class="screen hidden p-4">
+  <button onclick="goBack()" class="mb-3 w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">←</button>
+  <h2 class="font-bold text-sm">بلاغات - يراها الأدمن فقط</h2>
+  <input id="rTarget" placeholder="المبلغ عنه" class="w-full border-2 rounded-xl p-3 mb-2 text-sm mt-4 outline-none">
+  <select id="rType" class="w-full border-2 rounded-xl p-3 mb-2 text-sm outline-none"><option>منتج مخالف</option><option>احتيال</option><option>سعر وهمي</option></select>
+  <textarea id="rDesc" placeholder="تفاصيل البلاغ" class="w-full border-2 rounded-xl p-3 mb-3 text-sm outline-none"></textarea>
+  <button onclick="addReport()" class="w-full bg-gray-800 text-white py-3 rounded-xl text-sm font-bold">إرسال بلاغ</button>
+  <div id="reportList" class="space-y-2 mt-4"></div>
+</div>
+
+<div id="screen-profile" class="screen hidden p-5 text-center">
+  <button onclick="goBack()" class="w-9 h-9 bg-gray-100 rounded-full absolute right-5 flex items-center justify-center">←</button>
+  <div class="mt-10 relative inline-block">
+    <div id="profileAvatar" class="text-7xl">🧑🏿‍🌾</div>
+    <img id="profileImg" class="w-24 h-24 rounded-full mx-auto hidden object-cover border-4 border-green-500 shadow-lg">
+    <button onclick="document.getElementById('profileFile').click()" class="absolute -bottom-1 -right-1 w-8 h-8 bg-[#E86A2C] text-white rounded-full flex items-center justify-center text-xs shadow">📸</button>
+  </div>
+  <h3 id="profileName" class="font-bold mt-3 text-lg">مستخدم</h3>
+  <p id="profileEmail" class="text-[11px] text-gray-500">email</p>
+  <div class="mt-6 space-y-2.5 text-right">
+    <input type="file" id="profileFile" accept="image/*" class="hidden">
+    <button onclick="document.getElementById('profileFile').click()" class="w-full border-2 border-orange-200 bg-orange-50 rounded-xl p-3.5 text-xs font-bold text-orange-800">🖼️ تغيير الصورة الشخصية من المعرض</button>
+    <p id="profileImageStatus" class="text-[10px] text-green-600 hidden text-center font-bold">✓ تم حفظ الصورة</p>
+    <button onclick="toggleLang()" class="w-full border-2 rounded-xl p-3.5 text-xs font-bold">🌐 تغيير اللغة عربي / English</button>
+    <button onclick="exportDB()" class="w-full bg-blue-50 border-2 border-blue-200 text-blue-700 rounded-xl p-3.5 text-xs font-bold">⬇️ تصدير قاعدة البيانات JSON</button>
+    <button onclick="logout()" class="w-full bg-red-50 border-2 border-red-200 text-red-600 rounded-xl p-3.5 text-xs font-bold">خروج - تسجيل خروج</button>
+  </div>
+</div>
+
+<div id="screen-admin" class="screen hidden p-4">
+  <button onclick="goBack()" class="mb-3 w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">←</button>
+  <h2 class="font-bold text-[#1A5D1A]">لوحة تحكم الأدمن 🔐</h2>
+  <p class="text-[10px] text-gray-500">admin@darfur.market / Admin@2024Darfur</p>
+  <div class="grid grid-cols-4 gap-2 my-3 text-center text-[10px]">
+    <div class="bg-orange-50 p-2.5 rounded-xl border"><p id="statUsers" class="font-bold text-base">0</p><p>مستخدم</p></div>
+    <div class="bg-green-50 p-2.5 rounded-xl border"><p id="statProds" class="font-bold text-base">0</p><p>منتج</p></div>
+    <div class="bg-red-50 p-2.5 rounded-xl border"><p id="statReports" class="font-bold text-base">0</p><p>بلاغ</p></div>
+    <div class="bg-blue-50 p-2.5 rounded-xl border"><p id="statEmer" class="font-bold text-base">0</p><p>طوارئ</p></div>
+  </div>
+  <div class="flex gap-1 mb-3 text-[10px]">
+    <button onclick="showAdminTab('users')" class="flex-1 bg-gray-800 text-white py-2.5 rounded-xl font-bold">المستخدمين</button>
+    <button onclick="showAdminTab('products')" class="flex-1 border-2 py-2.5 rounded-xl font-bold">المنتجات</button>
+    <button onclick="showAdminTab('reports')" class="flex-1 border-2 py-2.5 rounded-xl font-bold">البلاغات</button>
+  </div>
+  <div id="adminContent" class="text-xs"></div>
+</div>
+
+</div>
+
+<div id="bottomNav" class="hidden border-t-2 bg-white px-1 py-2.5 flex justify-around text-[10px] sticky bottom-0">
+  <button onclick="showScreen('home')" class="flex flex-col items-center gap-0.5"><span class="text-lg">🏠</span>الرئيسية</button>
+  <button onclick="showScreen('add')" class="flex flex-col items-center gap-0.5"><span class="text-lg">➕</span>بيع</button>
+  <button onclick="showScreen('emergency')" class="flex flex-col items-center gap-0.5 text-red-600"><span class="text-lg">🚨</span>طوارئ</button>
+  <button onclick="showScreen('reports')" class="flex flex-col items-center gap-0.5"><span class="text-lg">⚠️</span>بلاغات</button>
+  <button onclick="showScreen('profile')" class="flex flex-col items-center gap-0.5"><span class="text-lg">👤</span>ملفي</button>
+  <button id="adminBtn" onclick="showScreen('admin')" class="hidden flex-col items-center gap-0.5 text-green-700 font-bold"><span class="text-lg">⚙️</span>أدمن</button>
+</div>
+
+<div id="toast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-5 py-2.5 rounded-full z-50 shadow-xl"></div>
+</div>
+
+<script>
+let lang='ar', gender='ذكر', avatar='🧑🏿‍🌾', historyStack=[], currentUser=null, isAdmin=false;
+const stateData={'جنوب دارفور':['نيالا','عد الفرسان','بليل','كاس','مرشنج','برام'],'شمال دارفور':['الفاشر','كتم','كبكابية','مليط','أم كدادة'],'غرب دارفور':['الجنينة','كلبس','بيضة','هبيلة'],'شرق دارفور':['عديلة','الضعين','عسلاية','شعيرية','ياسين','بحر العرب','الفردوس'],'وسط دارفور':['زالنجي','وادي صالح','أم دخن']};
+
+function setLang(l){lang=l; document.documentElement.dir=l==='ar'?'rtl':'ltr'; document.documentElement.lang=l; localStorage.setItem('dm_lang',l);}
+function toggleLang(){ setLang(lang==='ar'?'en':'ar'); showToast(lang==='ar'?'تم التحويل للعربية':'Switched to English'); }
+function showToast(m){const t=document.getElementById('toast'); t.textContent=m; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'),3000);}
+function pickAvatar(a){avatar=a; document.getElementById('avatarPreview').textContent=a; document.getElementById('profileAvatar').textContent=a;}
+function setGender(g){gender=g; document.getElementById('gMale').className=g==='ذكر'?'flex-1 border-2 rounded-xl py-2 text-xs bg-green-50 border-green-600 font-bold':'flex-1 border-2 rounded-xl py-2 text-xs'; document.getElementById('gFemale').className=g==='أنثى'?'flex-1 border-2 rounded-xl py-2 text-xs bg-green-50 border-green-600 font-bold':'flex-1 border-2 rounded-xl py-2 text-xs';}
+function showQR(){showToast('QR: darfur-market.sd/app');}
+
+function previewFile(inp,imgId){
+  if(!inp.files||!inp.files[0]) return;
+  const file=inp.files[0];
+  if(file.size>4*1024*1024){showToast('الصورة كبيرة - أقل من 4MB'); return;}
+  const r=new FileReader();
+  r.onload=e=>{
+    const img=document.getElementById(imgId);
+    if(img){img.src=e.target.result; img.classList.remove('hidden');}
+    localStorage.setItem('temp_'+imgId, e.target.result);
+    if(imgId==='prodPreview'){document.getElementById('prodImageStatus').classList.remove('hidden'); showToast('✓ تم اختيار صورة المنتج');}
+    if(imgId==='profileImg'){
+      document.getElementById('profileAvatar').classList.add('hidden');
+      document.getElementById('profileImageStatus').classList.remove('hidden');
+      if(currentUser){
+        currentUser.img=e.target.result;
+        const users=JSON.parse(localStorage.getItem('dm_users')||'[]');
+        const idx=users.findIndex(u=>u.id===currentUser.id);
+        if(idx>=0){users[idx].img=e.target.result; localStorage.setItem('dm_users', JSON.stringify(users));}
+        showToast('✓ تم حفظ الصورة الشخصية');
+      }
+    }
+  };
+  r.readAsDataURL(file);
+}
+
+function showScreen(id){
+  if(id!=='splash'){const cur=document.querySelector('.screen:not(.hidden)'); if(cur) historyStack.push(cur.id);}
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  const target=document.getElementById('screen-'+id);
+  if(target) target.classList.remove('hidden');
+  if(['home','add','emergency','reports','profile','admin'].includes(id)){
+    document.getElementById('topbar').classList.remove('hidden');
+    document.getElementById('bottomNav').classList.remove('hidden');
+    if(id==='home') renderProducts();
+    if(id==='emergency') renderEmergencies();
+    if(id==='reports') renderReports();
+    if(id==='admin') renderAdmin();
+  } else {
+    if(id==='splash'){document.getElementById('topbar').classList.add('hidden'); document.getElementById('bottomNav').classList.add('hidden');}
+  }
+  updateDBCount();
+}
+function goBack(){const prev=historyStack.pop(); if(prev){document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden')); document.getElementById(prev).classList.remove('hidden'); if(prev==='screen-home') renderProducts();} else showScreen('splash');}
+
+function updateLocalities(){
+  const state=document.getElementById('stateSel').value;
+  const locSel=document.getElementById('locSel'); locSel.innerHTML='';
+  if(state==='كل دارفور'){
+    const o=document.createElement('option'); o.textContent='كل المحليات - كل الناس'; o.value='الكل'; locSel.appendChild(o);
+    Object.values(stateData).flat().forEach(l=>{const opt=document.createElement('option'); opt.textContent=l; opt.value=l; locSel.appendChild(opt);});
+  } else {
+    (stateData[state]||[]).forEach(l=>{const o=document.createElement('option'); o.textContent=l; o.value=l; locSel.appendChild(o);});
+    const all=document.createElement('option'); all.textContent='كل محليات '+state; all.value='الكل'; locSel.insertBefore(all, locSel.firstChild);
+  }
+  filterProducts();
+}
+
+function updateDBCount(){
+  const u=JSON.parse(localStorage.getItem('dm_users')||'[]').length;
+  const p=JSON.parse(localStorage.getItem('dm_products')||'[]').length;
+  const r=JSON.parse(localStorage.getItem('dm_reports')||'[]').length;
+  const e=JSON.parse(localStorage.getItem('dm_emer')||'[]').length;
+  document.getElementById('dbUsers').textContent=u;
+  document.getElementById('dbProds').textContent=p;
+  document.getElementById('dbReports').textContent=r;
+  const su=document.getElementById('statUsers'); if(su){su.textContent=u; document.getElementById('statProds').textContent=p; document.getElementById('statReports').textContent=r; document.getElementById('statEmer').textContent=e;}
+}
+
+function initDB(){
+  if(!localStorage.getItem('dm_products')){
+    const mock=[
+      {id:1,name:'فول سوداني',type:'محاصيل - كتبه العضو',price:15000,qty:'25 كيلو',state:'شرق دارفور',loc:'عديلة',img:'🥜',imgBase64:'',seller:'أحمد',sellerId:0},
+      {id:2,name:'خروف دارفوري',type:'مواشي - كتبه العضو',price:120000,qty:'1 رأس',state:'شرق دارفور',loc:'عديلة',img:'🐑',imgBase64:'',seller:'محمد',sellerId:0},
+      {id:3,name:'عسل طبيعي',type:'عسل - كتبه العضو',price:20000,qty:'1 كيلو',state:'شرق دارفور',loc:'عديلة',img:'🍯',imgBase64:'',seller:'فاطمة',sellerId:0},
+      {id:4,name:'دخن',type:'محاصيل',price:18000,qty:'شوال',state:'وسط دارفور',loc:'زالنجي',img:'🌾',imgBase64:'',seller:'خديجة',sellerId:0}
+    ];
+    localStorage.setItem('dm_products',JSON.stringify(mock));
+  }
+  if(!localStorage.getItem('dm_users')) localStorage.setItem('dm_users',JSON.stringify([]));
+  if(!localStorage.getItem('dm_reports')) localStorage.setItem('dm_reports',JSON.stringify([]));
+  if(!localStorage.getItem('dm_emer')) localStorage.setItem('dm_emer',JSON.stringify([{id:1,type:'مطر غزير',text:'تحذير أمطار في عديلة اليوم',time:'الآن'},{id:2,type:'إغاثة',text:'توزيع إغاثة في عديلة غدا',time:'منذ ساعة'}]));
+}
+
+function doLogin(){
+  const e=document.getElementById('loginEmail').value.trim();
+  const p=document.getElementById('loginPass').value;
+  if(e==='admin@darfur.market' && p==='Admin@2024Darfur'){
+    isAdmin=true; currentUser={id:0,name:'الأدمن الرئيسي',email:e,avatar:'⚙️'}; 
+    document.getElementById('adminBtn').classList.remove('hidden'); document.getElementById('adminBtn').classList.add('flex');
+    document.getElementById('emergencyAdmin').classList.remove('hidden');
+    showToast('✅ أدمن - غرفة التحكم'); showScreen('home'); return;
+  }
+  const users=JSON.parse(localStorage.getItem('dm_users')||'[]');
+  const u=users.find(x=>x.email===e);
+  if(!u){showToast('❌ غير موجود - أنشئ حساب'); return;}
+  currentUser=u; showScreen('home'); showToast('✅ دخول - كل الناس');
+  document.getElementById('profileName').textContent=u.name;
+  document.getElementById('profileEmail').textContent=u.email;
+  document.getElementById('profileAvatar').textContent=u.avatar||'🧑🏿‍🌾';
+  if(u.img){document.getElementById('profileImg').src=u.img; document.getElementById('profileImg').classList.remove('hidden'); document.getElementById('profileAvatar').classList.add('hidden');}
+}
+
+function doRegister(){
+  const name=document.getElementById('regName').value.trim();
+  const email=document.getElementById('regEmail').value.trim();
+  const pass=document.getElementById('regPass').value;
+  const pass2=document.getElementById('regPass2').value;
+  if(!name||!email||!pass){showToast('❌ أكمل البيانات المطلوبة *'); return;}
+  if(pass!==pass2){showToast('❌ كلمة السر غير متطابقة'); return;}
+  if(!document.getElementById('terms').checked){showToast('❌ وافق على الشروط'); return;}
+  const users=JSON.parse(localStorage.getItem('dm_users')||'[]');
+  if(users.find(u=>u.email===email)){showToast('❌ البريد موجود مسبقا'); return;}
+  const img=localStorage.getItem('temp_regPreview')||'';
+  const newUser={id:Date.now(),name,email,pass,gender,avatar,img,lang,created:new Date().toLocaleString()};
+  users.push(newUser); localStorage.setItem('dm_users',JSON.stringify(users));
+  localStorage.removeItem('temp_regPreview');
+  
+  // إرسال إيميل ترحيب عبر Gmail + EmailJS
+  if(typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey !== "YOUR_PUBLIC_KEY"){
+    emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateWelcome, {
+      to_name: name,
+      to_email: email,
+      app_name: "سوق دارفور - عديلة",
+      user_location: "عديلة - شرق دارفور"
+    }).then(()=>{ showToast('✅ تم إنشاء الحساب + إيميل ترحيب مرسل لـ '+email); }, ()=>{ showToast('✅ تم إنشاء الحساب - الإيميل سيصل لاحقا'); });
+  } else {
+    showToast('✅ تم إنشاء الحساب - سيتم تحويلك للدخول (فعل EmailJS لإرسال Gmail)');
+  }
+  setTimeout(()=>showScreen('login'),1500);
+}
+
+function doForgot(){
+  const e=document.getElementById('forgotEmail').value.trim(); 
+  if(!e){showToast('أدخل بريدك'); return;}
+  const users=JSON.parse(localStorage.getItem('dm_users')||'[]');
+  const u=users.find(x=>x.email===e);
+  if(!u){showToast('❌ البريد غير موجود'); return;}
+  
+  if(typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey !== "YOUR_PUBLIC_KEY"){
+    showToast('📧 جاري إرسال رابط عبر Gmail...');
+    emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateReset, {
+      to_name: u.name,
+      to_email: e,
+      reset_link: "https://darfur-market.lovable.app/reset?email="+encodeURIComponent(e),
+      app_name: "سوق دارفور"
+    }).then(()=>{
+      showToast('✅ تم إرسال رابط الاستعادة إلى '+e+' عبر Gmail');
+      setTimeout(()=>showScreen('login'),1500);
+    }, (err)=>{
+      console.error(err);
+      showToast('❌ فشل الإرسال - تأكد من ربط Gmail في EmailJS');
+    });
+  } else {
+    showToast('📧 رابط وهمي (فعل EmailJS لإرسال Gmail حقيقي): '+e);
+    setTimeout(()=>showScreen('login'),1200);
+  }
+}
+
+function addProduct(){
+  const name=document.getElementById('pName').value.trim()||'منتج بدون اسم - كتبه العضو';
+  const type=document.getElementById('pType').value.trim()||'عام - كتبه العضو';
+  const price=document.getElementById('pPrice').value.trim();
+  const qty=document.getElementById('pQty').value.trim();
+  if(!price){showToast('❌ أدخل السعر فقط - الاسم والنوع اختياري'); return;}
+  const prods=JSON.parse(localStorage.getItem('dm_products')||'[]');
+  const imgBase64=localStorage.getItem('temp_prodPreview')||'';
+  prods.unshift({id:Date.now(),name,type,price,qty,state:document.getElementById('stateSel').value,loc:document.getElementById('locSel').value,img:imgBase64?'':'📦',imgBase64,seller:currentUser?.name||'مستخدم',sellerId:currentUser?.id||0,desc:document.getElementById('pDesc').value,date:new Date().toLocaleString()});
+  localStorage.setItem('dm_products',JSON.stringify(prods));
+  localStorage.removeItem('temp_prodPreview');
+  document.getElementById('prodPreview').classList.add('hidden');
+  document.getElementById('prodImageStatus').classList.add('hidden');
+  document.getElementById('pName').value=''; document.getElementById('pType').value=''; document.getElementById('pPrice').value=''; document.getElementById('pQty').value=''; document.getElementById('pDesc').value='';
+  showToast('✅ تم نشر '+name+' - النوع: '+type); showScreen('home');
+}
+
+function renderProducts(){
+  const state=document.getElementById('stateSel').value;
+  const loc=document.getElementById('locSel').value;
+  const prods=JSON.parse(localStorage.getItem('dm_products')||'[]');
+  const filtered=prods.filter(p=>{
+    if(state==='كل دارفور'||!state) return true;
+    if(loc && loc!=='الكل' && !loc.includes('كل محليات') && loc!=='كل المحليات - كل الناس') return p.loc===loc;
+    return p.state===state;
+  });
+  const grid=document.getElementById('productGrid'); grid.innerHTML='';
+  if(filtered.length===0){grid.innerHTML='<div class="col-span-2 text-center py-12 text-gray-400 text-xs">لا توجد منتجات<br>اختر كل دارفور</div>'; return;}
+  filtered.forEach(p=>{
+    const imgHtml=p.imgBase64?`<img src="${p.imgBase64}" class="w-full h-24 object-cover rounded-xl">`:`<div class="text-3xl text-center py-4">${p.img||'📦'}</div>`;
+    grid.innerHTML+=`<div class="border-2 rounded-2xl p-2.5 bg-white shadow-sm hover:shadow-md transition"><div class="bg-gray-50 rounded-xl overflow-hidden">${imgHtml}</div><p class="font-bold text-[11px] mt-2 truncate">${p.name}</p><p class="text-[9px] text-green-700 bg-green-50 rounded-full px-2 py-0.5 mt-1 truncate">نوع: ${p.type}</p><p class="text-[9px] text-gray-500 mt-1">${p.loc} - ${p.state}</p><p class="font-bold text-orange-600 text-xs mt-1">${p.price} ج</p><p class="text-[9px] mt-1">👤 ${p.seller}</p></div>`;
+  });
+  const showing=document.getElementById('showingText');
+  if(showing){
+    if(state==='كل دارفور') showing.textContent=`🌍 ${filtered.length} منتج - كل الناس - عديلة وكل دارفور`;
+    else showing.textContent=`📍 ${filtered.length} منتج في ${loc && loc!=='الكل' ? loc : state} - كل الناس`;
+  }
+}
+function filterProducts(){renderProducts();}
+function renderEmergencies(){
+  const list=JSON.parse(localStorage.getItem('dm_emer')||'[]');
+  const div=document.getElementById('emergencyList'); div.innerHTML='';
+  list.forEach(e=>{const color=e.type.includes('مطر')?'bg-blue-50 border-blue-200':'bg-orange-50 border-orange-200'; div.innerHTML+=`<div class="border-2 rounded-xl p-3 ${color}"><div class="flex justify-between"><span class="font-bold text-[11px]">${e.type}</span><span class="text-[9px] text-gray-500">${e.time}</span></div><p class="text-[11px] mt-1">${e.text}</p>${isAdmin?`<button onclick="delEmergency(${e.id})" class="text-[9px] text-red-600 mt-2 font-bold">حذف</button>`:''}</div>`;});
+}
+function addEmergency(){const type=document.getElementById('eType').value; const text=document.getElementById('eText').value.trim(); if(!text) return; const list=JSON.parse(localStorage.getItem('dm_emer')||'[]'); list.unshift({id:Date.now(),type,text,time:'الآن'}); localStorage.setItem('dm_emer',JSON.stringify(list)); document.getElementById('eText').value=''; renderEmergencies(); showToast('✅ تم نشر تنبيه');}
+function delEmergency(id){let list=JSON.parse(localStorage.getItem('dm_emer')); localStorage.setItem('dm_emer',JSON.stringify(list.filter(x=>x.id!==id))); renderEmergencies();}
+function addReport(){const target=document.getElementById('rTarget').value.trim(); const type=document.getElementById('rType').value; const desc=document.getElementById('rDesc').value.trim(); if(!target){showToast('حدد المبلغ عنه'); return;} const reps=JSON.parse(localStorage.getItem('dm_reports')||'[]'); reps.unshift({id:Date.now(),target,type,desc,by:currentUser?.name||'مجهول',byId:currentUser?.id||0,time:new Date().toLocaleString()}); localStorage.setItem('dm_reports',JSON.stringify(reps)); showToast('✅ تم إرسال البلاغ'); document.getElementById('rTarget').value=''; document.getElementById('rDesc').value=''; renderReports();}
+function renderReports(){const reps=JSON.parse(localStorage.getItem('dm_reports')||'[]'); const div=document.getElementById('reportList'); if(isAdmin) div.innerHTML=reps.map(r=>`<div class="border-2 rounded-xl p-3 text-[11px] bg-white"><p class="font-bold">${r.target} - ${r.type}</p><p class="mt-1">${r.desc}</p><p class="text-[9px] text-gray-500 mt-1">${r.by} - ${r.time}</p></div>`).join('')||'<p class="text-xs text-gray-400">لا بلاغات</p>'; else div.innerHTML=reps.filter(r=>r.byId===currentUser?.id).map(r=>`<div class="border-2 rounded-xl p-3 text-[11px]"><p class="font-bold">${r.target}</p><p>${r.desc}</p></div>`).join('')||'<p class="text-xs text-gray-400">لا بلاغات</p>';}
+function renderAdmin(){updateDBCount(); showAdminTab('users');}
+function showAdminTab(tab){
+  const users=JSON.parse(localStorage.getItem('dm_users')||'[]'); const prods=JSON.parse(localStorage.getItem('dm_products')||'[]'); const reps=JSON.parse(localStorage.getItem('dm_reports')||'[]');
+  const c=document.getElementById('adminContent');
+  if(tab==='users'){c.innerHTML=users.length?users.map(u=>`<div class="border-2 rounded-xl p-3 mb-2 flex justify-between text-[11px] bg-white"><div><p class="font-bold">${u.name} ${u.avatar}</p><p class="text-gray-500">${u.email} - ${u.gender}</p></div><button onclick="delUser(${u.id})" class="text-red-600 font-bold">حذف</button></div>`).join(''):'<p class="text-gray-400">لا مستخدمين</p>';}
+  else if(tab==='products'){c.innerHTML=prods.length?prods.map(p=>`<div class="border-2 rounded-xl p-3 mb-2 flex justify-between text-[11px] bg-white"><div><p class="font-bold">${p.name}</p><p class="text-green-600">${p.type}</p><p>${p.price}ج - ${p.loc}</p></div><button onclick="delProd(${p.id})" class="text-red-600 font-bold">حذف</button></div>`).join(''):'<p class="text-gray-400">لا منتجات</p>';}
+  else {c.innerHTML=reps.length?reps.map(r=>`<div class="border-2 rounded-xl p-3 mb-2 text-[11px] bg-white"><p class="font-bold">${r.target} - ${r.type}</p><p>${r.desc}</p><p class="text-[9px] text-gray-500">${r.by}</p><button onclick="delReport(${r.id})" class="text-red-600 font-bold mt-1">حل</button></div>`).join(''):'<p class="text-gray-400">لا بلاغات</p>';}
+}
+function delUser(id){let u=JSON.parse(localStorage.getItem('dm_users')); localStorage.setItem('dm_users',JSON.stringify(u.filter(x=>x.id!==id))); renderAdmin(); updateDBCount();}
+function delProd(id){let p=JSON.parse(localStorage.getItem('dm_products')); localStorage.setItem('dm_products',JSON.stringify(p.filter(x=>x.id!==id))); renderAdmin(); renderProducts(); updateDBCount();}
+function delReport(id){let r=JSON.parse(localStorage.getItem('dm_reports')); localStorage.setItem('dm_reports',JSON.stringify(r.filter(x=>x.id!==id))); renderAdmin(); updateDBCount();}
+function logout(){currentUser=null; isAdmin=false; document.getElementById('adminBtn').classList.add('hidden'); document.getElementById('adminBtn').classList.remove('flex'); document.getElementById('emergencyAdmin').classList.add('hidden'); historyStack=[]; showScreen('login'); showToast('تم تسجيل الخروج');}
+function exportDB(){const data={users:JSON.parse(localStorage.getItem('dm_users')||'[]'),products:JSON.parse(localStorage.getItem('dm_products')||'[]'),reports:JSON.parse(localStorage.getItem('dm_reports')||'[]'),emergencies:JSON.parse(localStorage.getItem('dm_emer')||'[]')}; const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='darfur_market_DB.json'; a.click(); showToast('⬇️ تم تصدير قاعدة البيانات');}
+
+function getLocationAuto(){
+  const locEl=document.getElementById('locText'); const gpsSplashEl=document.getElementById('gpsSplash');
+  const weatherEl=document.getElementById('weatherText');
+  if(!navigator.geolocation){
+    locEl.textContent='عديلة - شرق دارفور (موقعك الحالي)';
+    weatherEl.textContent='34° ☀️ حار - عديلة';
+    document.getElementById('stateSel').value='شرق دارفور';
+    updateLocalities();
+    const locSel=document.getElementById('locSel');
+    for(let i=0;i<locSel.options.length;i++){if(locSel.options[i].value.includes('عديلة')){locSel.selectedIndex=i; break;}}
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const hour=new Date().getHours();
+    let weather=hour<6||hour>18?'28° 🌙 معتدل - عديلة':'34° ☀️ حار - عديلة';
+    locEl.textContent='عديلة - شرق دارفور';
+    weatherEl.textContent=weather;
+    document.getElementById('stateSel').value='شرق دارفور';
+    updateLocalities();
+    const locSel=document.getElementById('locSel');
+    for(let i=0;i<locSel.options.length;i++){if(locSel.options[i].value.includes('عديلة')){locSel.selectedIndex=i; break;}}
+    filterProducts();
+    showToast('✅ موقعك: عديلة - شرق دارفور - '+weather);
+  }, ()=>{
+    locEl.textContent='عديلة - شرق دارفور (موقعك الحالي)';
+    weatherEl.textContent='34° ☀️ حار - عديلة';
+    document.getElementById('stateSel').value='شرق دارفور';
+    updateLocalities();
+    const locSel=document.getElementById('locSel');
+    for(let i=0;i<locSel.options.length;i++){if(locSel.options[i].value.includes('عديلة')){locSel.selectedIndex=i; break;}}
+  }, {enableHighAccuracy:true, timeout:10000, maximumAge:0});
+}
+function getLocationManual(){showToast('📍 جاري تحديد موقعك في عديلة...'); getLocationAuto();}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const prodInput=document.getElementById('prodImage');
+  if(prodInput) prodInput.addEventListener('change', function(){previewFile(this,'prodPreview');});
+  const profileInput=document.getElementById('profileFile');
+  if(profileInput) profileInput.addEventListener('change', function(){previewFile(this,'profileImg');});
+  const regInput=document.getElementById('regImage');
+  if(regInput) regInput.addEventListener('change', function(){previewFile(this,'regPreview');});
+});
+
+initDB(); updateLocalities(); updateDBCount();
+const savedLang=localStorage.getItem('dm_lang')||'ar'; setLang(savedLang);
+showScreen('splash');
+setTimeout(()=>{getLocationAuto();}, 800);
+// Auto go to login after 3 sec like real app
+setTimeout(()=>{
+  const cur = document.getElementById('screen-splash');
+  if(cur && !cur.classList.contains('hidden')){
+    showScreen('login');
+    showToast('مرحبا بك في سوق دارفور - عديلة');
+  }
+}, 3000);
+
+</script>
+</body>
+</html>
