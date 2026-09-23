@@ -1,0 +1,26 @@
+{
+  "background_color": "#0A2E22",
+  "description": "سوق دارفور - منصة البيع والشراء الأولى في دارفور",
+  "dir": "rtl",
+  "display": "standalone",
+  "icons": [
+    {
+      "purpose": "any maskable",
+      "sizes": "512x512",
+      "src": "https://cdn-icons-png.flaticon.com/512/3081/3081986.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "192x192",
+      "src": "https://cdn-icons-png.flaticon.com/512/3081/3081986.png",
+      "type": "image/png"
+    }
+  ],
+  "lang": "ar",
+  "name": "سوق دارفور - ULTRA PRO",
+  "orientation": "portrait",
+  "short_name": "سوق دارفور",
+  "start_url": "./index.html",
+  "theme_color": "#0A2E22"
+}
